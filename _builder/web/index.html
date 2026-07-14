@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ICD 编码知识库</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+<header><h1>ICD 编码知识库</h1>
+<div class="sub">ICD-10 · ICD-9 · DIP · DRG</div>
+<nav>
+<button class="active" onclick="st('icd10')">ICD-10</button>
+<button onclick="st('icd9')">ICD-9</button>
+<button onclick="st('drg')">DRG</button>
+<button onclick="st('dip')">DIP</button>
+<button onclick="st('convert')">编码转换</button>
+</nav></header>
+
+<div id="load" style="text-align:center;padding:80px">
+<div style="display:inline-block;width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:s .8s linear infinite;margin-bottom:16px"></div>
+<p style="color:var(--text-dim)">加载中...</p></div>
+<main style="display:none">
+
+<!-- ICD-10 -->
+<div id="t-icd10" class="tab active">
+<div class="sr"><input id="q10" placeholder="搜索 ICD-10..." oninput="s10()" autofocus></div>
+<div class="info" id="i10"></div>
+<div class="tbl-wrap"><table><thead><tr><th>疾病编码（医保2.0）</th><th>诊断名称（医保2.0）</th><th>疾病编码（国临版）</th><th>诊断名称（国临版）</th><th>对比</th><th>不作为主诊</th></tr></thead><tbody id="b10"></tbody></table></div>
+</div>
+
+<!-- ICD-9 -->
+<div id="t-icd9" class="tab">
+<div class="sr"><input id="q9" placeholder="搜索 ICD-9..." oninput="s9()"></div>
+<div class="info" id="i9"></div>
+<div class="tbl-wrap"><table><thead><tr><th>手术操作编码（医保2.0）</th><th>手术操作名称（医保2.0）</th><th>手术操作编码（国临版）</th><th>手术操作名称（国临版）</th><th>对比</th><th>类别</th><th>录入</th><th>不作为主手术</th></tr></thead><tbody id="b9"></tbody></table></div>
+</div>
+
+<!-- DRG -->
+<div id="t-drg" class="tab">
+<h3 style="margin-bottom:4px">CHS-DRG 2.0 分组器</h3>
+<div id="drg-status" style="font-size:.75em;color:var(--text-dim);margin-bottom:10px">DRG数据: <span id="ds2">预加载中...</span> <span style="margin-left:12px">分组版本: </span><select id="drg-ver" style="font-size:.82em;padding:3px 8px;border:1px solid var(--border);border-radius:var(--r-xs);background:var(--bg-card);color:var(--text)" onchange="dr()"><option value="nat">全国 CHS-DRG 2.0</option><option value="linfen">山西临汾 CHS-DRG-SX2026</option></select></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+<div class="drgbox">
+<h4>疾病诊断 (ICD-10)</h4>
+<div style="margin-bottom:10px">
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">主要诊断（仅一个）</div>
+<div class="sug-rel"><div class="drg-inp"><input id="di" placeholder="编码或关键字..." oninput="sdx('di','ds')" onkeydown="if(event.key==='Enter'){event.preventDefault();adx()}"></div>
+<div class="sug" id="ds"></div></div>
+<div class="chips" id="dc"></div></div>
+<div>
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">其他诊断（可多个）</div>
+<div class="sug-rel"><div class="drg-inp"><input id="d2" placeholder="编码或关键字..." oninput="sdx('d2','d2s')" onkeydown="if(event.key==='Enter'){event.preventDefault();adx2()}"></div>
+<div class="sug" id="d2s"></div></div>
+<div class="chips col" id="d2c"></div></div>
+</div>
+<div class="drgbox">
+<h4>手术操作 (ICD-9)</h4>
+<div style="margin-bottom:10px">
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">主要手术操作（仅一个）</div>
+<div class="sug-rel"><div class="drg-inp"><input id="pi" placeholder="编码或关键字..." oninput="spx('pi','ps')" onkeydown="if(event.key==='Enter'){event.preventDefault();apx()}"></div>
+<div class="sug" id="ps"></div></div>
+<div class="chips" id="pc"></div></div>
+<div>
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">其他手术操作（可多个）</div>
+<div class="sug-rel"><div class="drg-inp"><input id="p2" placeholder="编码或关键字..." oninput="spx('p2','p2s')" onkeydown="if(event.key==='Enter'){event.preventDefault();apx2()}"></div>
+<div class="sug" id="p2s"></div></div>
+<div class="chips col" id="p2c"></div></div>
+</div>
+</div>
+	<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0 8px 0;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);font-size:.8em">
+	<label style="display:flex;align-items:center;gap:4px">性别 <select id="gdr" style="width:56px;font-size:.9em" onchange="dr()"><option value="">不限</option><option value="M">男</option><option value="F">女</option></select></label>
+	<label style="display:flex;align-items:center;gap:4px">出生日期 <input id="bdt" type="text" placeholder="YYYY-MM-DD" style="width:110px;font-size:.9em" oninput="calAge();dr()"></label>
+	<label style="display:flex;align-items:center;gap:4px">入院日期 <input id="adt" type="text" placeholder="YYYY-MM-DD" style="width:110px;font-size:.9em" oninput="calAge();dr()"></label>
+	<span id="age-disp" style="color:var(--accent);font-weight:600;font-size:.85em"></span>
+	<label style="display:flex;align-items:center;gap:4px;margin-left:6px">住院天数 <input id="los" type="number" min="1" style="width:52px;font-size:.9em" placeholder="天" onchange="dr()"></label>
+	<label style="display:flex;align-items:center;gap:4px">离院方式 <select id="dis" style="width:80px;font-size:.9em" onchange="dr()"><option value="">—</option><option value="1">医嘱离院</option><option value="2">非医嘱</option><option value="3">死亡</option><option value="4">转院</option></select></label>
+	<label style="display:flex;align-items:center;gap:4px">医院等级 <select id="hosp-lv" style="width:64px;font-size:.9em" onchange="dr()"><option value="3">三级</option><option value="2">二级</option><option value="1">一级</option></select></label>
+	<span style="font-size:.72em;color:var(--text-dim)">住院天数/离院方式/医院等级仅影响费用结算，不影响分组</span>
+	</div>
+<button class="btn-drg" onclick="try{document.getElementById('drr').innerHTML='<div class=clr>⏳ 正在查询...</div>';dr()}catch(e){document.getElementById('drr').innerHTML='<div class=clr>❌ JS错误: '+e.message+'</div>'}">查询 DRG 入组</button>
+<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:10px;margin-bottom:16px;font-size:.78em;color:var(--text-dim)">
+<b>DRG 编码说明：</b>
+后缀 <span style="color:var(--danger);font-weight:600">1</span>=MCC(严重合并症) |
+<span style="color:var(--warning);font-weight:600">3</span>=CC(一般合并症) |
+<span style="color:var(--success);font-weight:600">5</span>=不伴合并症 |
+<span style="font-weight:600">9</span>=未细分(无MCC/CC拆分)
+</div>
+
+
+
+<!-- ═══ MCC 编码查询（搜索+列表） ═══ -->
+<details id="mcc-ref" style="margin-bottom:8px">
+<summary style="cursor:pointer;font-weight:600;font-size:.92em;padding:6px 0;color:var(--danger)">MCC 严重合并症/并发症 编码查询（4,477条 · 可按编码/名称/诊断标准搜索）</summary>
+<div style="margin-top:8px">
+<div class="sr"><input id="mcc-q" placeholder="搜索 MCC 编码/名称/诊断标准/症状/检验..." oninput="_searchMcc()"></div>
+<div class="info" id="mcc-info"></div>
+<div class="tbl-wrap" style="max-height:55vh"><table>
+<thead><tr><th style="min-width:78px">疾病编码</th><th style="min-width:130px">疾病名称</th><th style="min-width:70px">亚目代码</th><th style="min-width:90px">亚目名称</th><th style="min-width:160px">诊断标准（点击展开详情）</th><th style="min-width:70px">备注</th></tr></thead>
+<tbody id="mcc-tb"><tr><td colspan="6" class="emp">展开后自动加载 MCC 编码列表...</td></tr></tbody></table></div>
+<div id="mcc-page" style="text-align:center;margin-top:8px;font-size:.78em;display:flex;gap:4px;justify-content:center;flex-wrap:wrap"></div>
+<div style="margin-top:10px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);font-size:.72em;color:var(--text-dim);line-height:1.8">
+<b>说明：</b>① 点击编码行展开查看详细诊断标准（症状/检验/检查/病理） ② 约100个重点MCC编码有详细诊断标准，其余编码按ICD-10章节归类 ③ 诊断标准仅供临床参考，具体MCC判定以CHS-DRG 2.0分组方案为准 ④ MCC共<b>4,477条</b>，CC共<b>8,008条</b>
+</div>
+</div>
+</details>
+
+
+
+
+<div id="qy-warn"></div>
+<div id="drr"><div class="emp"><p>添加诊断和手术，查询 DRG 分组</p></div></div>
+
+<!-- ═══ 批量入组分析 ═══ -->
+<details id="batch-section" style="margin-top:16px">
+<summary style="cursor:pointer;font-weight:600;font-size:.92em;padding:6px 0;color:var(--accent)">批量入组分析</summary>
+<div style="margin-top:10px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+<div class="upload-box">
+<div style="font-weight:600;font-size:.84em;margin-bottom:8px">📋 病案首页上传</div>
+<div class="upload-area" id="img-drop" onclick="document.getElementById('img-file').click()">
+<div style="font-size:1.6em;margin-bottom:2px">🖼️</div>
+<div style="font-size:.82em">点击或拖拽上传 JPG/PNG/PDF</div>
+<div style="font-size:.7em;color:var(--text-dim)">病案首页 / 医保结算清单</div>
+<input type="file" id="img-file" accept="image/*,.pdf" style="display:none" onchange="handleImg(event)">
+</div>
+<div id="img-pr" style="margin-top:8px;display:none"></div>
+</div>
+<div class="upload-box">
+<div style="font-weight:600;font-size:.84em;margin-bottom:8px">📊 出院数据上传</div>
+<div class="upload-area" id="xls-drop" onclick="document.getElementById('xls-file').click()">
+<div style="font-size:1.6em;margin-bottom:2px">📑</div>
+<div style="font-size:.82em">点击或拖拽上传 Excel (.xlsx/.xls)</div>
+<div style="font-size:.7em;color:var(--text-dim)">含诊断+手术编码，自动批量DRG入组</div>
+<input type="file" id="xls-file" accept=".xlsx,.xls" style="display:none" onchange="handleXls(event)">
+</div>
+<div id="xls-stat" style="font-size:.75em;color:var(--text-dim);margin-top:6px"></div>
+</div>
+</div>
+<div id="col-map" style="display:none;margin-bottom:12px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);font-size:.78em"></div>
+<div id="batch-res" style="margin-top:12px"></div>
+</div>
+</details>
+</div>
+
+<!-- DIP 2.0 -->
+	<div id="t-dip" class="tab">
+	<h3 style="margin-bottom:2px">DIP 2.0 分组器</h3>
+	<div id="dip-status" style="font-size:.75em;color:var(--text-dim);margin-bottom:8px">DIP数据: <span id="dip-ds2">已就绪 (9,520核心病种)</span> <span style="margin-left:12px">分组版本: </span><select id="dip-ver" style="font-size:.82em;padding:3px 8px;border:1px solid var(--border);border-radius:var(--r-xs);background:var(--bg-card);color:var(--text)" onchange="dipVer()"><option value="">国家 DIP 2.0</option><option value="gd_meizhou">广东·梅州 DIP 2.0</option><option value="fj_xiamen">福建·厦门 DIP 2.0</option><option value="js_lyg">江苏·连云港 DIP 2.0</option></select></div>
+	<div id="dip-ver-info" style="font-size:.72em;color:var(--text-dim);margin-bottom:10px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm)">国家 DIP 2.0 版 · 9,520组核心病种(手术操作6,311+保守治疗3,209) · 覆盖95%以上出院病例 · 2025年起全国统一执行</div>
+
+	<!-- ═══ 主目录 ═══ -->
+	<details open style="margin-bottom:12px">
+	<summary style="cursor:pointer;font-weight:600;font-size:.92em;padding:6px 0;color:var(--accent)">主目录：病种分组匹配（诊断 + 手术操作 → DIP 病种组）</summary>
+	<div style="margin-top:8px">
+
+	<!-- Payment parameters -->
+	<div class="dip-params">
+	<label>点值 <input id="dpv" type="number" value="13000" style="width:70px" onchange="dipCalc()"> 元/分</label>
+	<label>机构等级 <select id="dip-lv" onchange="dipCalc()"><option value="1.0">三级 1.0</option><option value="0.8">二级 0.8</option><option value="0.6">一级 0.6</option></select></label>
+	</div>
+
+	<!-- Input area -->
+	<div class="dip-input-row">
+	<div class="dip-col">
+	<div style="margin-bottom:10px">
+	<div style="font-size:.78em;color:var(--text-dim);margin-bottom:4px;font-weight:600">主要诊断 (ICD-10，仅一个)</div>
+	<div class="sug-rel"><div class="drg-inp"><input id="dip-di" placeholder="编码或关键字..." oninput="sdip('dip-di','dip-ds')" onkeydown="if(event.key==='Enter'){event.preventDefault();adipp()}"></div>
+	<div class="sug" id="dip-ds"></div></div>
+	<div class="chips" id="dip-dc"></div>
+	</div>
+	<div>
+	<div style="font-size:.78em;color:var(--text-dim);margin-bottom:4px;font-weight:600">其他诊断（可多个）</div>
+	<div class="sug-rel"><div class="drg-inp"><input id="dip-d2" placeholder="编码或关键字..." oninput="sdip('dip-d2','dip-d2s')" onkeydown="if(event.key==='Enter'){event.preventDefault();adipp2()}"></div>
+	<div class="sug" id="dip-d2s"></div></div>
+	<div class="chips col" id="dip-d2c"></div>
+	</div>
+	</div>
+	<div class="dip-col">
+	<div style="margin-bottom:10px">
+	<div style="font-size:.78em;color:var(--text-dim);margin-bottom:4px;font-weight:600">主要手术操作 (ICD-9，仅一个)</div>
+	<div class="sug-rel"><div class="drg-inp"><input id="dip-pi" placeholder="编码或关键字..." oninput="spdip('dip-pi','dip-ps')" onkeydown="if(event.key==='Enter'){event.preventDefault();adippx()}"></div>
+	<div class="sug" id="dip-ps"></div></div>
+	<div class="chips" id="dip-pc"></div>
+	</div>
+	<div>
+	<div style="font-size:.78em;color:var(--text-dim);margin-bottom:4px;font-weight:600">其他手术操作（可多个）</div>
+	<div class="sug-rel"><div class="drg-inp"><input id="dip-p2" placeholder="编码或关键字..." oninput="spdip('dip-p2','dip-p2s')" onkeydown="if(event.key==='Enter'){event.preventDefault();adippx2()}"></div>
+	<div class="sug" id="dip-p2s"></div></div>
+	<div class="chips col" id="dip-p2c"></div>
+	</div>
+	</div>
+	</div>		</div>
+		</details>
+
+
+	<!-- ═══ 辅助目录 ═══ -->
+	<details style="margin-bottom:12px">
+	<summary style="cursor:pointer;font-weight:600;font-size:.92em;padding:6px 0;color:var(--warning)">辅助目录：支付校正（对主目录分值进行正向/负向调整）</summary>
+	<div style="margin-top:8px;display:flex;flex-direction:column;gap:10px">
+
+	<!-- 疾病严重程度辅助目录 -->
+	<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+	<div style="font-weight:600;font-size:.82em;margin-bottom:8px;color:var(--success)">疾病严重程度辅助目录（正向校正 — 病情越重支付越高）</div>
+	<div class="dip-params" style="margin-bottom:0">
+	<label>CCI指数 <select id="dip-cci" onchange="dipCalc()"><option value="1.0">无合并症 1.0</option><option value="0.95">CCI=0 0.95</option><option value="1.35">CCI≥3 1.35</option></select></label>
+	<label>年龄特征 <select id="dip-age" onchange="dipCalc()"><option value="1.0">18-45岁 1.0</option><option value="2.8"><1岁 2.8</option><option value="1.6">>76岁 1.6</option></select></label>
+	<label>疾病严重程度 <select id="dip-sev" onchange="dipCalc()" disabled><option value="1.0">未启用</option></select></label>
+	<label>肿瘤严重程度 <select id="dip-tumor" onchange="dipCalc()" disabled><option value="1.0">未启用</option></select></label>
+	<label>次要诊断病种 <select id="dip-subdx" onchange="dipCalc()" disabled><option value="1.0">未启用</option></select></label>
+	</div>
+	<div style="font-size:.68em;color:var(--text-dim);margin-top:6px">CCI和年龄已接入国标MCC/CC自动检测；疾病严重程度、肿瘤分型、次要诊断病种需地方医保局公布辅助目录后启用</div>
+	</div>
+
+	<!-- 违规行为辅助目录 -->
+	<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+	<div style="font-weight:600;font-size:.82em;margin-bottom:8px;color:var(--danger)">违规行为辅助目录（负向校正 — 不合理诊疗扣减支付）<span style="font-size:.75em;color:var(--text-dim);font-weight:400"> 暂未启用</span></div>
+	<div class="dip-params" style="margin-bottom:0">
+	<label>二次入院(7天内) <select disabled><option>无</option></select></label>
+	<label>低标入院 <select disabled><option>无</option></select></label>
+	<label>超长住院 <select disabled><option>无</option></select></label>
+	<label>死亡风险 <select disabled><option>无</option></select></label>
+	<label>病案质量 <select disabled><option>正常</option></select></label>
+	</div>
+	<div style="font-size:.68em;color:var(--text-dim);margin-top:6px">违规行为辅助目录在年度清算时由医保局根据病案首页数据和医保结算清单进行审核扣减，此处仅作框架预留</div>
+	</div>
+
+	</div>
+	</details>
+
+		<div style="text-align:center;margin-bottom:12px"><button class="btn-drg" onclick="dipCalc()">查询 DIP 入组</button></div>
+		<div id="dip-rr"><div class="emp"><p>添加诊断编码，查询 DIP 病种分组与预估支付</p></div></div>
+<!-- 病种库搜索（省份自适应） -->
+		<div class="dip-search-sep" id="dip-sep" style="display:block">或直接搜索病种库</div>
+		<div id="dip-prov-tabs" style="display:none;margin-bottom:6px;gap:4px">
+		<button class="dip-ptab active" onclick="_dipProvTab('core')">核心病种</button>
+		<button class="dip-ptab" onclick="_dipProvTab('comp')">综合病种</button>
+		<button class="dip-ptab" onclick="_dipProvTab('tcm')">中医优势病种</button>
+			<button class="dip-ptab" onclick="_dipProvTab('fixed')" style="display:none">定额病种</button>
+		</div>
+		<div class="sr"><input id="qd" placeholder="搜索 DIP 编码/诊断/手术..." oninput="sd()"></div>
+		<div class="info" id="id"></div>
+		<div class="tbl-wrap"><table><thead id="dip-th"><tr><th style="width:65px">DIP编码</th><th style="width:180px">主要诊断</th><th style="width:160px">主手术操作</th><th style="width:90px">相关手术</th><th style="width:55px">分值</th></tr></thead><tbody id="bd"></tbody></table></div>
+		</div>
+
+
+
+	<!-- 编码转换 -->
+	<div id="t-convert" class="tab">
+	<iframe src="index-convert.html" style="width:100%;height:calc(100vh - 120px);border:none;border-radius:8px"></iframe>
+	</div>
+
+</main>
+
+<script src="app.js?v=20260704d"></script>
+</body>
+</html>

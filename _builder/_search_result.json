@@ -1,0 +1,42 @@
+[
+  {
+    "type": "西药",
+    "code": "XN > XN05 > XN05C",
+    "cat_code": "XN",
+    "subcat_code": "XN05",
+    "subsubcat_code": "XN05C",
+    "cat": "神经系统药物",
+    "subcat": "精神安定药",
+    "subsubcat": "催眠药和镇静药",
+    "level": "乙",
+    "id": 3328,
+    "name": "地达西尼胶囊",
+    "form": "",
+    "note": "限失眠患者。",
+    "essential": false,
+    "variants": [],
+    "rules": [],
+    "_has_variants": false,
+    "_in_rx": false,
+    "negotiated": true,
+    "nego_info": {
+      "name": "地达西尼胶囊",
+      "type": "西药",
+      "note": "限失眠患者。",
+      "period": "",
+      "sheet": "谈判药（西药） "
+    },
+    "prescribing": {
+      "drug_name": "地达西尼胶囊",
+      "insurance_notes": [
+        {
+          "risk": "high",
+          "text": "【医保目录限定】限失眠患者。",
+          "materials": [
+            "疾病诊断须符合医保限定支付适应症"
+          ]
+        }
+      ]
+    }
+  }
+]

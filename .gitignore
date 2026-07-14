@@ -1,0 +1,59 @@
+# 构建缓存和数据库
+_builder/icd_kb.db
+_builder/__pycache__/
+**/__pycache__/
+*.pyc
+
+# 生成的前端数据（大文件）
+_builder/web/*.json.gz
+_builder/drug/*.json.gz
+_builder/drug/*.json
+_builder/drug/*.html
+_builder/4way-mapping/*.json.gz
+_builder/code-converter/*.json.gz
+_builder/demo/*.json.gz
+
+# 原始数据源（大文件，可重新获取）
+_builder/*.xlsx
+_builder/*.pdf
+_builder/0.*.xlsx
+_builder/按病种分值*.xlsx
+_builder/按病种分值*.pdf
+_builder/按病组*.pdf
+_builder/四方映射表*.xlsx
+_builder/上海市*.xlsx
+_builder/上海市*.pdf
+_builder/全国医疗服务*.xlsx
+_builder/全国医疗服务*.pdf
+_builder/国家医疗价格*.xlsx
+_builder/手术操作分类代码*.xlsx
+_builder/手术主导词*.xlsx
+_builder/CHS-DRG*.xlsx
+_builder/ICD-10医保*.xlsx
+_builder/ICD-9-CM3*.xlsx
+_builder/ICD10国临版*.xlsx
+_builder/ICD9国临版*.xlsx
+_builder/drug/*.pdf
+_builder/drug/药品儿童专用/
+_builder/drug/药品限制儿童使用/
+_builder/drug/药品限孕妇使用/
+_builder/drug/药品限工伤/
+_builder/drug/药品限医疗机构/
+_builder/drug/药品限支付疗程/
+_builder/drug/药品限定支付/
+_builder/drug/药品限制性使用/
+_builder/drug/9-16批药品限制性使用/
+_builder/4way-mapping/_all_laser.json
+_builder/4way-mapping/_all_ob_map.json
+
+# 临时文件
+_temp_*
+*.tmp
+*.temp
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Obsidian
+.obsidian/workspace.json

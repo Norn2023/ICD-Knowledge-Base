@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新项目使用说明 - 立项指南</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #1f2937; }
+.header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+.header h1 { font-size: 1.3em; }
+.header a { color: #bfdbfe; text-decoration: none; font-size: 0.9em; padding: 6px 14px; border: 1px solid #bfdbfe; border-radius: 6px; }
+.header a:hover { color: white; background: rgba(255,255,255,0.1); }
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+/* Filter */
+.filter-bar { background: white; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.filter-bar label { font-weight: 600; font-size: 0.9em; color: #374151; }
+.filter-bar select { padding: 6px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9em; background: white; }
+.filter-bar input { padding: 6px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9em; min-width: 200px; }
+.filter-bar .count { color: #6b7280; font-size: 0.85em; margin-left: auto; }
+
+/* Table */
+.table-wrap { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 0.88em; }
+thead th { background: #f8fafc; padding: 10px 14px; text-align: left; font-weight: 600; color: #374151; border-bottom: 2px solid #e5e7eb; white-space: nowrap; }
+th.col-cat { width: 100px; }
+th.col-name { width: 220px; }
+tbody td { padding: 10px 14px; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
+tbody tr:hover { background: #f9fafb; }
+.cat-cell { font-weight: 600; color: #1e40af; }
+.name-cell { font-weight: 500; }
+.name-cell.general { color: #059669; }
+.content-cell { line-height: 1.7; color: #4b5563; }
+
+/* Category group */
+.cat-group-header td { background: #eff6ff; padding: 10px 14px; font-weight: 700; color: #1e40af; font-size: 1em; border-bottom: 2px solid #bfdbfe; }
+
+/* Badges */
+.badge { display: inline-block; font-size: 0.72em; padding: 1px 6px; border-radius: 3px; margin-right: 4px; font-weight: 500; }
+.badge.general { color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; }
+.badge.project { color: #2563eb; background: #eff6ff; border: 1px solid #bfdbfe; }
+.badge.price { color: #7c3aed; background: #f5f3ff; border: 1px solid #ddd6fe; }
+
+/* Section divider */
+.section-label { font-size: 0.78em; color: #9ca3af; margin-bottom: 4px; display: block; }
+
+.loading { text-align: center; padding: 60px; color: #9ca3af; }
+.empty { text-align: center; padding: 40px; color: #9ca3af; }
+
+@media (max-width: 768px) {
+  .filter-bar { flex-direction: column; align-items: flex-start; }
+  th.col-cat, th.col-name { width: auto; min-width: 80px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📋 新项目使用说明</h1>
+  <a href="/">← 返回四向映射</a>
+</div>
+
+<div class="container">
+  <div class="filter-bar">
+    <label>筛选类别：</label>
+    <select id="catFilter" onchange="applyFilter()"><option value="">全部</option></select>
+    <input type="text" id="searchInput" placeholder="搜索项目名称..." oninput="applyFilter()">
+    <span class="count" id="resultCount"></span>
+  </div>
+
+  <div class="table-wrap">
+    <div id="loading" class="loading">加载中...</div>
+    <table id="dataTable" style="display:none;">
+      <thead>
+        <tr>
+          <th class="col-cat">类别</th>
+          <th class="col-name">项目名称</th>
+          <th>具体内容</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div id="empty" class="empty" style="display:none;">无匹配结果</div>
+  </div>
+</div>
+
+<script>
+let allRows = [];
+
+async function loadData() {
+  try {
+    const resp = await fetch('/api/instructions');
+    const data = await resp.json();
+    buildRows(data);
+  } catch(e) {
+    document.getElementById('loading').textContent = '加载失败: ' + e.message;
+  }
+}
+
+function buildRows(data) {
+  const rows = [];
+  const cats = data.categories || {};
+
+  for (const [catName, catData] of Object.entries(cats)) {
+    // Category header
+    rows.push({ type: 'header', cat: catName });
+
+    // "通用" rows - general usage instructions
+    const generalItems = catData['通用'] || [];
+    generalItems.forEach((text, idx) => {
+      rows.push({
+        type: 'general',
+        cat: catName,
+        name: '通用',
+        idx: idx + 1,
+        content: text,
+      });
+    });
+
+    // Per-project rows
+    const projects = catData.projects || [];
+    projects.forEach(p => {
+      let content = '';
+      if (p.notes) content += `<span class="badge price">计价说明</span>${esc(p.notes)}`;
+      if (p.output) {
+        if (content) content += '<br>';
+        content += `<span class="badge project">服务产出</span>${esc(p.output).substring(0, 200)}`;
+      }
+      if (p.cost) {
+        if (content) content += '<br>';
+        content += `<span class="badge project">价格构成</span>${esc(p.cost).substring(0, 200)}`;
+      }
+      if (!content) content = '<span style="color:#9ca3af;">—</span>';
+
+      rows.push({
+        type: 'project',
+        cat: catName,
+        name: p.name,
+        code: p.code,
+        price: p.price,
+        unit: p.unit,
+        payment: p.payment,
+        content: content,
+      });
+    });
+  }
+
+  allRows = rows;
+
+  // Populate category filter
+  const filter = document.getElementById('catFilter');
+  for (const cat of Object.keys(cats)) {
+    const cd = cats[cat];
+    const count = (cd?.projects || []).length;
+    filter.innerHTML += `<option value="${esc(cat)}">${esc(cat)}（${count}项）</option>`;
+  }
+
+  applyFilter();
+}
+
+function applyFilter() {
+  const catFilter = document.getElementById('catFilter').value;
+  const searchText = document.getElementById('searchInput').value.toLowerCase();
+
+  const filtered = allRows.filter(row => {
+    if (row.type === 'header') {
+      const hasContent = allRows.some(r =>
+        r.cat === row.cat && r.type !== 'header' &&
+        (!catFilter || r.cat === catFilter) &&
+        (!searchText || (r.name || '').toLowerCase().includes(searchText) || (r.content || '').toLowerCase().includes(searchText))
+      );
+      return hasContent;
+    }
+    if (catFilter && row.cat !== catFilter) return false;
+    if (searchText && !(row.name || '').toLowerCase().includes(searchText) &&
+        !(row.content || '').toLowerCase().includes(searchText)) return false;
+    return true;
+  });
+
+  renderTable(filtered);
+}
+
+function renderTable(rows) {
+  const tbody = document.getElementById('tableBody');
+  const table = document.getElementById('dataTable');
+  document.getElementById('loading').style.display = 'none';
+
+  if (rows.length === 0) {
+    table.style.display = 'none';
+    document.getElementById('empty').style.display = 'block';
+    document.getElementById('resultCount').textContent = '';
+    return;
+  }
+
+  table.style.display = '';
+  document.getElementById('empty').style.display = 'none';
+
+  let html = '';
+  let lastCat = '';
+  for (const row of rows) {
+    if (row.type === 'header') {
+      if (lastCat) html += '<tr><td colspan="3" style="height:8px;padding:0;"></td></tr>';
+      lastCat = row.cat;
+      html += `<tr class="cat-group-header"><td colspan="3">${esc(row.cat)} — 使用说明</td></tr>`;
+    } else if (row.type === 'general') {
+      html += `<tr>
+        <td class="cat-cell">${esc(row.cat)}</td>
+        <td class="name-cell general"><span class="badge general">通用 #${row.idx}</span></td>
+        <td class="content-cell">${esc(row.content)}</td>
+      </tr>`;
+    } else {
+      const nameExt = row.price ? ` <span style="color:#7c3aed;font-size:0.85em;">¥${esc(row.price)}${row.unit ? '/'+esc(row.unit) : ''}</span>` : '';
+      const codeStr = row.code ? `<br><span style="color:#9ca3af;font-size:0.8em;">${esc(row.code)}</span>` : '';
+      html += `<tr>
+        <td class="cat-cell">${esc(row.cat)}</td>
+        <td class="name-cell">${esc(row.name)}${nameExt}${codeStr}</td>
+        <td class="content-cell">${row.content}</td>
+      </tr>`;
+    }
+  }
+
+  tbody.innerHTML = html;
+  document.getElementById('resultCount').textContent = `共 ${rows.filter(r => r.type !== 'header').length} 条`;
+}
+
+function esc(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+loadData();
+</script>
+</body>
+</html>

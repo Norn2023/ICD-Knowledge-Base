@@ -1,0 +1,29 @@
+{
+  "pluginList": [
+    "mtymek/opencode-obsidian",
+    "yishentu/claudian"
+  ],
+  "pluginSubListFrozenVersion": [
+    {
+      "repo": "mtymek/opencode-obsidian",
+      "version": ""
+    },
+    {
+      "repo": "yishentu/claudian",
+      "version": ""
+    }
+  ],
+  "themesList": [],
+  "updateAtStartup": true,
+  "updateThemesAtStartup": true,
+  "enableAfterInstall": true,
+  "loggingEnabled": false,
+  "loggingPath": "BRAT-log",
+  "loggingVerboseEnabled": false,
+  "debuggingMode": false,
+  "notificationsEnabled": true,
+  "globalTokenName": "",
+  "personalAccessToken": "",
+  "selectLatestPluginVersionByDefault": true,
+  "allowIncompatiblePlugins": true
+}

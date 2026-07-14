@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>
+<h1>DRG Lookup Test</h1>
+<div id="r">Loading...</div>
+<script>
+fetch('drg.json').then(function(resp){return resp.json()}).then(function(drg){
+  var dx='D25.100', px='68.2901';
+  var dx2=drg.dx2a||{}, px2=drg.px2a||{};
+
+  var dxMatch=dx2[dx]||dx2[dx+'x001']||[];
+  var pxMatch=px2[px]||[];
+
+  var out='<p>DRG data loaded: dx2a keys='+Object.keys(dx2).length+', px2a keys='+Object.keys(px2).length+'</p>';
+  out+='<p>D25.100 exact: '+(dx in dx2)+'</p>';
+  out+='<p>D25.100x001: '+(('D25.100x001') in dx2)+'</p>';
+  out+='<p>D25.100 matches: '+dxMatch.length+'</p>';
+  dxMatch.forEach(function(m){out+='<p>  -> ADRG: '+m.a+' '+m.an+'</p>'});
+  out+='<p>68.2901 exact: '+(px in px2)+'</p>';
+  out+='<p>68.2901 matches: '+pxMatch.length+'</p>';
+  pxMatch.forEach(function(m){out+='<p>  -> ADRG: '+m.a+' '+m.an+'</p>'});
+
+  document.getElementById('r').innerHTML=out;
+}).catch(function(e){
+  document.getElementById('r').innerHTML='ERROR: '+e.message;
+});
+</script>
+</body></html>

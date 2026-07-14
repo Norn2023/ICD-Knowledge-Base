@@ -1,0 +1,22 @@
+[
+  {
+    "type": "西药",
+    "code": "XN > XN06 > XN06C",
+    "cat_code": "XN",
+    "subcat_code": "XN06",
+    "subsubcat_code": "XN06C",
+    "cat": "神经系统药物",
+    "subcat": "精神兴奋药",
+    "subsubcat": "精神安定药和精神兴奋药的复方制剂",
+    "level": "乙",
+    "id": 1300,
+    "name": "氟哌噻吨美利曲辛",
+    "form": "口服常释剂型",
+    "note": "",
+    "essential": false,
+    "variants": [],
+    "rules": [],
+    "_has_variants": false,
+    "_in_rx": false
+  }
+]

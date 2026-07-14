@@ -1,0 +1,11 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>
+<h1>JSON Load Test</h1>
+<div id="status">Loading...</div>
+<script>
+fetch('data.json').then(function(r){return r.json();}).then(function(d){
+  document.getElementById('status').innerHTML='OK! ICD10: '+d.icd10.length+' codes, ICD9: '+d.icd9.length+' codes';
+}).catch(function(e){
+  document.getElementById('status').innerHTML='ERROR: '+e.message;
+});
+</script>
+</body></html>
