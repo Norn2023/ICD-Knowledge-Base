@@ -614,182 +614,6 @@ function _detectCols(headers) {
     });
     return r;
 }
-function handleImg(e) {
-    var f = e.target.files[0]; if (!f) return;
-    var pr = document.getElementById('img-pr'); pr.style.display = 'block';
-    if (f.type === 'application/pdf') {
-        pr.innerHTML = '<div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);font-size:.82em">PDF已上传: <b>' + f.name + '</b> (' + (f.size / 1024).toFixed(1) + ' KB)<br><span style="color:var(--text-dim)">请参照此页面手动录入编码</span></div>';
-    } else {
-        var rdr = new FileReader();
-        rdr.onload = function(ev) { pr.innerHTML = '<div class="img-pr-wrap"><button class="img-close" onclick="document.getElementById(\'img-pr\').style.display=\'none\'">x</button><img src="' + ev.target.result + '" alt="病案首页"></div>'; };
-        rdr.readAsDataURL(f);
-    }
-}
-function handleXls(e) {
-    var f = e.target.files[0]; if (!f) return;
-    var stat = document.getElementById('xls-stat');
-    if (typeof XLSX === 'undefined') { stat.innerHTML = '<span style="color:var(--danger)">SheetJS库加载失败，请刷新重试</span>'; return; }
-    stat.innerHTML = '读取中...';
-    var rdr = new FileReader();
-    rdr.onload = function(ev) {
-        try {
-            var wb = XLSX.read(ev.target.result, {type: 'array'});
-            var sn = wb.SheetNames[0]; var ws = wb.Sheets[sn];
-            var data = XLSX.utils.sheet_to_json(ws, {header: 1});
-            if (!data || data.length < 2) { stat.innerHTML = '<span style="color:var(--danger)">文件为空或格式不正确</span>'; return; }
-            var headers = data[0].map(function(h) { return String(h || '').trim(); });
-            var rows = data.slice(1).filter(function(r) { return r && r.some(function(c) { return c !== undefined && c !== null && String(c).trim() !== ''; }); });
-            stat.innerHTML = '已读取: <b>' + rows.length + '</b> 条患者数据, <b>' + headers.length + '</b> 列字段';
-            var cols = _detectCols(headers);
-            _showColMap(headers, cols, rows);
-        } catch(err) { stat.innerHTML = '<span style="color:var(--danger)">解析失败: ' + err.message + '</span>'; }
-    };
-    rdr.readAsArrayBuffer(f);
-}
-var _colMapState = {};
-function _showColMap(headers, cols, rows) {
-    var mapDiv = document.getElementById('col-map'); mapDiv.style.display = 'block';
-    var fields = [
-        {key: 'dxCode', label: '主要诊断编码', col: cols.dxCode},
-        {key: 'dxName', label: '主要诊断名称', col: cols.dxName},
-        {key: 'pxCode', label: '主要手术编码', col: cols.pxCode},
-        {key: 'pxName', label: '主要手术名称', col: cols.pxName},
-        {key: 'gender', label: '性别', col: cols.gender},
-        {key: 'age', label: '年龄', col: cols.age}
-    ];
-    var h = '<div style="font-weight:600;margin-bottom:6px">列映射确认（可手动调整）</div>';
-    h += '<table class="col-map-table"><tr><th>字段</th><th>匹配列</th><th>预览(首行)</th></tr>';
-    _colMapState = {};
-    fields.forEach(function(f) {
-        var colIdx = f.col; _colMapState[f.key] = colIdx;
-        var sel = '<select onchange="_updateColMap(\'' + f.key + '\',this.value)">';
-        sel += '<option value="-1"' + (colIdx === -1 ? ' selected' : '') + '>— 未匹配</option>';
-        headers.forEach(function(hdr, i) { sel += '<option value="' + i + '"' + (i === colIdx ? ' selected' : '') + '>' + hdr + '</option>'; });
-        sel += '</select>';
-        var prev = colIdx >= 0 && rows[0] ? String(rows[0][colIdx] || '') : '';
-        h += '<tr><td style="font-weight:500">' + f.label + '</td><td>' + sel + '</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.85em">' + prev + '</td></tr>';
-    });
-    var dx2Opts = ''; headers.forEach(function(hdr, i) { dx2Opts += '<option value="' + i + '"' + (cols.dx2Cols.indexOf(i) >= 0 ? ' selected' : '') + '>' + hdr + '</option>'; });
-    _colMapState.dx2Cols = cols.dx2Cols.slice();
-    h += '<tr><td style="font-weight:500">其他诊断编码</td><td><select multiple style="height:50px;width:100%;font-size:.82em" onchange="_updateMultiCol(\'dx2Cols\',this)">' + dx2Opts + '</select></td><td style="font-size:.7em;color:var(--text-dim)">Ctrl+点击多选</td></tr>';
-    var px2Opts = ''; headers.forEach(function(hdr, i) { px2Opts += '<option value="' + i + '"' + (cols.px2Cols.indexOf(i) >= 0 ? ' selected' : '') + '>' + hdr + '</option>'; });
-    _colMapState.px2Cols = cols.px2Cols.slice();
-    h += '<tr><td style="font-weight:500">其他手术编码</td><td><select multiple style="height:50px;width:100%;font-size:.82em" onchange="_updateMultiCol(\'px2Cols\',this)">' + px2Opts + '</select></td><td style="font-size:.7em;color:var(--text-dim)">Ctrl+点击多选</td></tr>';
-    h += '</table><div style="margin-top:8px;display:flex;gap:8px;align-items:center"><button class="btn-drg" onclick="_runBatch()" style="font-size:.78em;padding:6px 20px">执行批量入组 (' + rows.length + ' 条)</button></div>';
-    mapDiv.innerHTML = h;
-    window._batchData = {headers: headers, rows: rows, cols: cols};
-}
-function _updateColMap(key, val) { _colMapState[key] = parseInt(val); }
-function _updateMultiCol(key, sel) { var vals = []; for (var i = 0; i < sel.options.length; i++) { if (sel.options[i].selected) vals.push(parseInt(sel.options[i].value)); } _colMapState[key] = vals; }
-function _runBatch() {
-    var bd = window._batchData; if (!bd) return;
-    var rows = bd.rows;
-    var dxCol = _colMapState.dxCode !== undefined ? _colMapState.dxCode : bd.cols.dxCode;
-    var dxnCol = _colMapState.dxName !== undefined ? _colMapState.dxName : bd.cols.dxName;
-    var pxCol = _colMapState.pxCode !== undefined ? _colMapState.pxCode : bd.cols.pxCode;
-    var pxnCol = _colMapState.pxName !== undefined ? _colMapState.pxName : bd.cols.pxName;
-    var genderCol = _colMapState.gender !== undefined ? _colMapState.gender : bd.cols.gender;
-    var ageCol = _colMapState.age !== undefined ? _colMapState.age : bd.cols.age;
-    var dx2Cols = _colMapState.dx2Cols !== undefined ? _colMapState.dx2Cols : bd.cols.dx2Cols;
-    var px2Cols = _colMapState.px2Cols !== undefined ? _colMapState.px2Cols : bd.cols.px2Cols;
-    var resDiv = document.getElementById('batch-res');
-    resDiv.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-dim)">正在分析 ' + rows.length + ' 条数据...</div>';
-    var results = []; var batchSize = 80; var idx = 0;
-    function processChunk() {
-        var end = Math.min(idx + batchSize, rows.length);
-        for (var i = idx; i < end; i++) {
-            var row = rows[i];
-            var dxCode = dxCol >= 0 ? String(row[dxCol] || '').trim() : '';
-            var dxName = dxnCol >= 0 ? String(row[dxnCol] || '').trim() : '';
-            var pxCode = pxCol >= 0 ? String(row[pxCol] || '').trim() : '';
-            var pxName = pxnCol >= 0 ? String(row[pxnCol] || '').trim() : '';
-            var gender = genderCol >= 0 ? String(row[genderCol] || '').trim() : '';
-            if (/^(男|男性|M|m|1)$/.test(gender)) gender = 'M';
-            else if (/^(女|女性|F|f|2)$/.test(gender)) gender = 'F';
-            else gender = '';
-            var dx2List = []; dx2Cols.forEach(function(ci) { var v = String(row[ci] || '').trim(); if (v) v.split(/[,;，；、\s]+/).forEach(function(c) { c = c.trim(); if (c) dx2List.push({c: c, n: ''}); }); });
-            var px2List = []; px2Cols.forEach(function(ci) { var v = String(row[ci] || '').trim(); if (v) v.split(/[,;，；、\s]+/).forEach(function(c) { c = c.trim(); if (c) px2List.push({c: c, n: ''}); }); });
-            var pd = dxCode ? {c: dxCode, n: dxName} : null;
-            var pp = pxCode ? {c: pxCode, n: pxName} : null;
-            var r = _computeOneDrg(pd, dx2List, pp, px2List, gender);
-            r._row = i + 1; r._dx = dxCode; r._dxn = dxName; r._px = pxCode; r._pxn = pxName;
-            r._gender = gender; r._age = ageCol >= 0 ? String(row[ageCol] || '').trim() : '';
-            results.push(r);
-        }
-        idx = end;
-        if (idx < rows.length) { resDiv.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-dim)">处理中... ' + idx + '/' + rows.length + '</div>'; setTimeout(processChunk, 10); }
-        else { _showBatchResults(results); }
-    }
-    setTimeout(processChunk, 10);
-}
-function _showBatchResults(results) {
-    var resDiv = document.getElementById('batch-res');
-    var grouped = 0, ungrouped = 0, mccCount = 0, ccCount = 0, qyCount = 0;
-    results.forEach(function(r) {
-        if (r.decision && r.decision.primary && r.decision.primary.finalDRG) grouped++; else ungrouped++;
-        if (r.mccInfo && r.mccInfo.effS === 'MCC') mccCount++; else if (r.mccInfo && r.mccInfo.effS === 'CC') ccCount++;
-        if (r.isQY) qyCount++;
-    });
-    var h = '<div class="batch-summary"><div class="batch-stat">';
-    h += '<span style="background:var(--success-light);color:var(--success)">入组: ' + grouped + '</span>';
-    if (ungrouped > 0) h += '<span style="background:var(--danger-light);color:var(--danger)">未入组: ' + ungrouped + '</span>';
-    if (qyCount > 0) h += '<span style="background:var(--warning-light);color:var(--warning)">QY歧义: ' + qyCount + '</span>';
-    h += '<span style="background:rgba(232,85,85,.1);color:var(--danger)">MCC: ' + mccCount + '</span>';
-    h += '<span style="background:rgba(232,150,58,.1);color:var(--warning)">CC: ' + ccCount + '</span>';
-    h += '<span>总计: ' + results.length + ' 条</span></div>';
-    h += '<button onclick="_exportBatch()" style="font-size:.75em;padding:4px 14px;border:1px solid var(--accent);background:var(--accent-light);color:var(--accent);border-radius:var(--r-sm);cursor:pointer;margin-bottom:8px">导出 CSV</button></div>';
-    h += '<div class="tbl-wrap" style="max-height:55vh"><table><thead><tr><th>序号</th><th>主要诊断</th><th>主要手术</th><th>DRG编码</th><th>DRG名称</th><th>MDC</th><th>合并症</th><th>备注</th></tr></thead><tbody>';
-    results.forEach(function(r) {
-        var drg = (r.decision && r.decision.primary && r.decision.primary.finalDRG) ? r.decision.primary.finalDRG : null;
-        var drgCode = drg ? drg.c : '—'; var drgName = drg ? drg.n : '—';
-        var mdc = drg && r.decision && r.decision.primary ? ((_drg.adrg_mdc[r.decision.primary.code] || {}).mdc || '—') : '—';
-        var mccLabel = r.mccInfo ? r.mccInfo.effS : '—';
-        var mccColor = mccLabel === 'MCC' ? 'var(--danger)' : (mccLabel === 'CC' ? 'var(--warning)' : 'var(--text-dim)');
-        var note = []; if (r.isQY) note.push('QY歧义'); if (r.decisionNote) note.push(r.decisionNote); if (!r.decision) note.push('未匹配ADRG'); if (r.error) note.push(r.error);
-        var rowBg = !drg ? ' style="opacity:.6"' : '';
-        h += '<tr' + rowBg + '><td>' + r._row + '</td><td><span class="tag">' + (r._dx || '—') + '</span></td>';
-        h += '<td>' + (r._px ? '<span class="tag tp">' + r._px + '</span>' : '—') + '</td>';
-        h += '<td><b style="color:' + (drg ? 'var(--accent)' : 'var(--text-dim)') + '">' + drgCode + '</b></td>';
-        h += '<td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + drgName + '</td>';
-        h += '<td>' + mdc + '</td><td><span style="color:' + mccColor + ';font-weight:600">' + mccLabel + '</span></td>';
-        h += '<td style="font-size:.75em;color:var(--text-dim)">' + (note.join('; ') || '—') + '</td></tr>';
-    });
-    h += '</tbody></table></div>'; resDiv.innerHTML = h; window._batchResults = results;
-}
-function _exportBatch() {
-    var results = window._batchResults; if (!results || !results.length) return;
-    var csv = '﻿序号,主要诊断,主要手术,DRG编码,DRG名称,MDC,合并症,备注,性别,年龄\n';
-    results.forEach(function(r) {
-        var drg = (r.decision && r.decision.primary && r.decision.primary.finalDRG) ? r.decision.primary.finalDRG : null;
-        var note = []; if (r.isQY) note.push('QY歧义'); if (r.decisionNote) note.push(r.decisionNote); if (!r.decision) note.push('未匹配');
-        var row = [r._row, r._dx, r._px, drg ? drg.c : '', drg ? drg.n : '',
-            drg && r.decision && r.decision.primary ? ((_drg.adrg_mdc[r.decision.primary.code] || {}).mdc || '') : '',
-            r.mccInfo ? r.mccInfo.effS : '', note.join(';'), r._gender, r._age];
-        csv += row.map(function(v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(',') + '\n';
-    });
-    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
-    var url = URL.createObjectURL(blob); var a = document.createElement('a');
-    a.href = url; a.download = 'DRG批量入组结果.csv'; a.click(); URL.revokeObjectURL(url);
-}
-// Drag-and-drop listeners
-(function() {
-    ['img-drop', 'xls-drop'].forEach(function(id) {
-        var el = document.getElementById(id); if (!el) return;
-        el.addEventListener('dragover', function(e) { e.preventDefault(); el.classList.add('dragover'); });
-        el.addEventListener('dragleave', function() { el.classList.remove('dragover'); });
-        el.addEventListener('drop', function(e) {
-            e.preventDefault(); el.classList.remove('dragover');
-            var files = e.dataTransfer.files; if (!files.length) return;
-            if (id === 'img-drop') { document.getElementById('img-file').files = files; handleImg({target: {files: files}}); }
-            else { document.getElementById('xls-file').files = files; handleXls({target: {files: files}}); }
-        });
-    });
-})();
-
-
-
-
-
 // === DIP 2.0 Grouper ===
 var _dipDx=[],_dipDx2=[],_dipPx=[],_dipPx2=[];
 var _dipProv={
@@ -799,12 +623,12 @@ var _dipProv={
 'sd':{name:'山东',note:'全省统一 | 160基础病种+11中医优势',basePv:13000,pvNote:'参考 ~13,000元/分(1:2:7加权)',lv:{'1.00':'三级','0.85':'二级','0.70':'一级'},ad:{age:[[0,6,1.05],[7,120,1.0]]},cci:{0.95:'无合并症',1.0:'一般',1.35:'重症'},extra:'特例单议1-3‰；22项绩效评价',cciSys:'国标MCC/CC(二元判断)'}
 };
 function dipVer(){var pv=document.getElementById('dip-ver').value;var info=document.getElementById('dip-ver-info');var tabs=document.getElementById('dip-prov-tabs');var sep=document.getElementById('dip-sep');
-if(!pv){info.innerHTML='国家 DIP 2.0 版 · 9,520组核心病种(手术6,311+保守3,209) · 覆盖率95%+ · 各省点值=年度基金预算/总分值(每年核定)';resetDipParams();dipCalc();tabs.style.display='none';sep.textContent='或直接搜索病种库';sd();return}
+if(!pv){info.innerHTML='国家 DIP 2.0 版 · 9,520组核心病种(手术6,311+保守3,209) · 覆盖率95%+ · 各省点值=年度基金预算/总分值(每年核定)';resetDipParams();document.getElementById('dip-prov-params').style.display='none';dipCalc();tabs.style.display='none';sep.textContent='DIP 2.0 核心病种库';sd();return}
 var pr=_dipProv[pv];if(!pr)return;info.innerHTML='<b>'+pr.name+'</b> | '+pr.note+(pr.pvNote?'<br>'+pr.pvNote:'')+(pr.cciSys?'<br><span style="color:var(--accent)">'+pr.cciSys+'</span>':'');var lvSel=document.getElementById('dip-lv');lvSel.innerHTML='';for(var v in pr.lv){lvSel.innerHTML+='<option value="'+v+'">'+pr.lv[v]+' '+v+'</option>'};document.getElementById('dpv').value=pr.basePv;var agSel=document.getElementById('dip-age');agSel.innerHTML='';if(pr.ad&&pr.ad.age){pr.ad.age.forEach(function(a){agSel.innerHTML+='<option value="'+a[2]+'">'+(a[0]===0?'<'+a[1]+'岁':(a[0]===a[1]?a[0]+'岁':a[0]+'-'+a[1]+'岁'))+' x'+a[2]+'</option>'})};var ccSel=document.getElementById('dip-cci');ccSel.innerHTML='';for(var c in pr.cci){ccSel.innerHTML+='<option value="'+c+'">'+pr.cci[c]+' x'+c+'</option>'};
 // Show province tabs and load data
 var cat=_dipProvCatalog[pv];
-if(cat&&!cat._xm&&!cat._loading&&!cat._core&&!cat._loading){_dipProvLoad(pv)}else if(cat&&(cat._core&&cat._core.length||cat._xm&&cat._xm.length)){tabs.style.display='flex';if(pv==='fj_xiamen'){_xmSubTab(_xmActiveSub||'main')}else{document.querySelectorAll('.dip-ptab').forEach(function(b,i){if(i===1)b.textContent='综合病种';if(i===3){b.style.display=cat&&cat.fixed?'':'none'}})}}else{tabs.style.display='none';sep.textContent='或直接搜索病种库'}
-dipCalc();sd()}
+if(cat&&!cat._xm&&!cat._loading&&!cat._core&&!cat._loading){_dipProvLoad(pv)}else if(cat&&(cat._core&&cat._core.length||cat._xm&&cat._xm.length)){tabs.style.display='flex';if(pv==='fj_xiamen'){_xmSubTab(_xmActiveSub||'main')}else{document.querySelectorAll('.dip-ptab').forEach(function(b,i){if(i===1)b.textContent='综合病种';if(i===3){b.style.display=cat&&cat.fixed?'':'none'}})}}else{tabs.style.display='none';sep.textContent='DIP 2.0 核心病种库'}
+document.getElementById('dip-prov-params').style.display='';dipCalc();sd()}
 function resetDipParams(){var lv=document.getElementById('dip-lv');lv.innerHTML='<option value="1.0">三级 1.0</option><option value="0.8">二级 0.8</option><option value="0.6">一级 0.6</option>';document.getElementById('dpv').value=13000;var ag=document.getElementById('dip-age');ag.innerHTML='<option value="1.0">18-45岁 1.0</option><option value="2.8"><1岁 2.8</option><option value="1.6">>76岁 1.6</option>';var cc=document.getElementById('dip-cci');cc.innerHTML='<option value="1.0">无合并症 1.0</option><option value="0.95">CCI=0 0.95</option><option value="1.35">CCI>=3 1.35</option>'}
 function adipp(c,n){if(!c){var q=document.getElementById('dip-di').value.trim().toUpperCase();var f=D.m10[q]||f10all(q,1)[0];if(f){c=f.c;n=f.n}document.getElementById('dip-di').value=''}if(c){_dipDx=[{c:c,n:n}];rdip();document.getElementById('dip-ds').style.display='none'}}
 function adipp2(c,n){if(!c){var q=document.getElementById('dip-d2').value.trim().toUpperCase();var f=D.m10[q]||f10all(q,1)[0];if(f){c=f.c;n=f.n}document.getElementById('dip-d2').value=''}if(c){_dipDx2.push({c:c,n:n});rdip();document.getElementById('dip-d2s').style.display='none'}}

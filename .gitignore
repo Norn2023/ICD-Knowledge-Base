@@ -4,14 +4,21 @@ _builder/__pycache__/
 **/__pycache__/
 *.pyc
 
-# 生成的前端数据（大文件）
-_builder/web/*.json.gz
+# 生成的前端数据（大文件）- 排除大型中间数据
 _builder/drug/*.json.gz
 _builder/drug/*.json
 _builder/drug/*.html
 _builder/4way-mapping/*.json.gz
 _builder/code-converter/*.json.gz
 _builder/demo/*.json.gz
+
+# Web 应用核心数据文件（需要提交）
+# 以下文件保留，不要忽略：
+# _builder/web/data.json
+# _builder/web/drg.json
+# _builder/web/detail.json
+# _builder/web/coding_rules.json
+# _builder/web/*.json.gz (压缩版本)
 
 # 原始数据源（大文件，可重新获取）
 _builder/*.xlsx
@@ -45,6 +52,37 @@ _builder/drug/药品限制性使用/
 _builder/drug/9-16批药品限制性使用/
 _builder/4way-mapping/_all_laser.json
 _builder/4way-mapping/_all_ob_map.json
+
+# 构建中间数据
+_builder/_*.json
+_builder/_*.py
+
+# 临时脚本（不需要提交）
+_builder/web/app-dual.js
+_builder/web/app-dual-server.js
+_builder/web/app_new.js
+_builder/web/app.js.bak
+_builder/web/app.js.gz
+_builder/web/dr_func.txt
+_builder/web/drg_section.html
+_builder/web/drg_section.txt
+_builder/web/nul
+_builder/web/test.html
+_builder/web/test_drg.html
+_builder/web/index-convert.html
+_builder/web/app-convert.js
+
+# 根目录构建产物
+/_final_stats.json
+/_obstetric_mappings.json
+
+# 根目录临时文件
+nul
+*.md~
+
+# 不需要提交的根目录文件
+_builder/web/启动网页.bat
+_builder/web/侵权声明.md
 
 # 临时文件
 _temp_*

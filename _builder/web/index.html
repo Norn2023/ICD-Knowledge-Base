@@ -111,36 +111,6 @@
 <div id="qy-warn"></div>
 <div id="drr"><div class="emp"><p>添加诊断和手术，查询 DRG 分组</p></div></div>
 
-<!-- ═══ 批量入组分析 ═══ -->
-<details id="batch-section" style="margin-top:16px">
-<summary style="cursor:pointer;font-weight:600;font-size:.92em;padding:6px 0;color:var(--accent)">批量入组分析</summary>
-<div style="margin-top:10px">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-<div class="upload-box">
-<div style="font-weight:600;font-size:.84em;margin-bottom:8px">📋 病案首页上传</div>
-<div class="upload-area" id="img-drop" onclick="document.getElementById('img-file').click()">
-<div style="font-size:1.6em;margin-bottom:2px">🖼️</div>
-<div style="font-size:.82em">点击或拖拽上传 JPG/PNG/PDF</div>
-<div style="font-size:.7em;color:var(--text-dim)">病案首页 / 医保结算清单</div>
-<input type="file" id="img-file" accept="image/*,.pdf" style="display:none" onchange="handleImg(event)">
-</div>
-<div id="img-pr" style="margin-top:8px;display:none"></div>
-</div>
-<div class="upload-box">
-<div style="font-weight:600;font-size:.84em;margin-bottom:8px">📊 出院数据上传</div>
-<div class="upload-area" id="xls-drop" onclick="document.getElementById('xls-file').click()">
-<div style="font-size:1.6em;margin-bottom:2px">📑</div>
-<div style="font-size:.82em">点击或拖拽上传 Excel (.xlsx/.xls)</div>
-<div style="font-size:.7em;color:var(--text-dim)">含诊断+手术编码，自动批量DRG入组</div>
-<input type="file" id="xls-file" accept=".xlsx,.xls" style="display:none" onchange="handleXls(event)">
-</div>
-<div id="xls-stat" style="font-size:.75em;color:var(--text-dim);margin-top:6px"></div>
-</div>
-</div>
-<div id="col-map" style="display:none;margin-bottom:12px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);font-size:.78em"></div>
-<div id="batch-res" style="margin-top:12px"></div>
-</div>
-</details>
 </div>
 
 <!-- DIP 2.0 -->
@@ -155,7 +125,7 @@
 	<div style="margin-top:8px">
 
 	<!-- Payment parameters -->
-	<div class="dip-params">
+	<div class="dip-params" id="dip-prov-params" style="display:none">
 	<label>点值 <input id="dpv" type="number" value="13000" style="width:70px" onchange="dipCalc()"> 元/分</label>
 	<label>机构等级 <select id="dip-lv" onchange="dipCalc()"><option value="1.0">三级 1.0</option><option value="0.8">二级 0.8</option><option value="0.6">一级 0.6</option></select></label>
 	</div>
@@ -231,7 +201,7 @@
 		<div style="text-align:center;margin-bottom:12px"><button class="btn-drg" onclick="dipCalc()">查询 DIP 入组</button></div>
 		<div id="dip-rr"><div class="emp"><p>添加诊断编码，查询 DIP 病种分组与预估支付</p></div></div>
 <!-- 病种库搜索（省份自适应） -->
-		<div class="dip-search-sep" id="dip-sep" style="display:block">或直接搜索病种库</div>
+		<div class="dip-search-sep" id="dip-sep" style="display:block;font-size:1.1em;font-weight:600;color:var(--accent)">DIP 2.0 核心病种库</div>
 		<div id="dip-prov-tabs" style="display:none;margin-bottom:6px;gap:4px">
 		<button class="dip-ptab active" onclick="_dipProvTab('core')">核心病种</button>
 		<button class="dip-ptab" onclick="_dipProvTab('comp')">综合病种</button>
