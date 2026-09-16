@@ -97,3 +97,7 @@ Thumbs.db
 .obsidian/workspace.json
 _builder/drug/pdf_products.json.part
 速查手册/
+
+# Secrets
+.claudian/claudian-settings.json
+.obsidian/plugins/realclaudian/data.json
