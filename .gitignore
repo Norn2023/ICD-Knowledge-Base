@@ -93,11 +93,14 @@ _temp_*
 Thumbs.db
 .DS_Store
 
-# Obsidian
+# AI工作区（本地会话数据）
+.claudian/
+.agents/
+.grimoire/
+.clawhub/
+
+# Obsidian配置和插件
 .obsidian/workspace.json
+.obsidian/plugins/
 _builder/drug/pdf_products.json.part
 速查手册/
-
-# Secrets
-.claudian/claudian-settings.json
-.obsidian/plugins/realclaudian/data.json
