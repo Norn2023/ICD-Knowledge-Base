@@ -107,3 +107,6 @@ _builder/drug/pdf_products.json.part
 
 # Secrets
 .claudian/claudian-settings.json
+
+# 本地开发备用版本
+_builder/web2/
