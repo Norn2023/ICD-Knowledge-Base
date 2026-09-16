@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "conversationId": "conv-1789564200961-trabat4kx",
+  "records": [
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789564201186-3sshlro",
+      "userTurnOrdinal": 1,
+      "state": "accepted",
+      "localMessageId": "msg-1789564200953-spmefou",
+      "timestamp": 1789564200954,
+      "rawDisplayText": "你好",
+      "canonicalText": "你好",
+      "images": [],
+      "contentDigest": "815b1925f3db319cfc8ef8cad8a91b3f8b512f630d8f82635cb105e93e666c2a",
+      "providerUserMessageId": "e2334a34-a8ad-417f-9f0a-a7a94584d211",
+      "providerAssistantMessageId": "3a21d2c3-da40-4406-bb21-bc0660686fbf"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789564387483-rsu9emg",
+      "userTurnOrdinal": 2,
+      "state": "accepted",
+      "localMessageId": "msg-1789564387478-5c4sbso",
+      "timestamp": 1789564387478,
+      "rawDisplayText": "我这个知识库里面的内容完全消失了，你帮我看一下能否找回",
+      "canonicalText": "我这个知识库里面的内容完全消失了，你帮我看一下能否找回",
+      "images": [],
+      "contentDigest": "d4082c7498c328ad76b3ed87d439bafbbc17e055a35ec69c9e423c71566a0aa2",
+      "providerUserMessageId": "4b74a162-7463-4ae2-86ab-9212d116c80d"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "total_files": 356,
+  "total_links_checked": 975,
+  "valid_links": 973,
+  "broken_links": 2,
+  "broken_links_details": [
+    {
+      "source_file": "00-导航\\主索引.md",
+      "broken_link": "编码名称",
+      "expected_path": "编码名称"
+    },
+    {
+      "source_file": "欢迎.md",
+      "broken_link": "编码名称",
+      "expected_path": "编码名称"
+    }
+  ],
+  "success_rate": 99.7948717948718
+}

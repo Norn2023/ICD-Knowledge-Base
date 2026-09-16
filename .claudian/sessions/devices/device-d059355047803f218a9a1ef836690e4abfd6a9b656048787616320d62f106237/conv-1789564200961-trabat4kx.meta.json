@@ -1,0 +1,23 @@
+{
+  "id": "conv-1789564200961-trabat4kx",
+  "providerId": "claude",
+  "title": "Greeting and Introduction",
+  "titleGenerationStatus": "success",
+  "createdAt": 1789564200971,
+  "lastActivityAt": 1789564387478,
+  "sessionId": "eb251734-e67d-415e-8360-98a62251ef2e",
+  "selectedModel": "opus",
+  "providerState": {
+    "providerSessionId": "eb251734-e67d-415e-8360-98a62251ef2e"
+  },
+  "usage": {
+    "model": "opus",
+    "inputTokens": 27370,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "contextWindow": 1000000,
+    "contextTokens": 27370,
+    "percentage": 3,
+    "contextWindowIsAuthoritative": true
+  }
+}
