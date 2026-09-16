@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "openmaic": {
+      "version": "0.3.3",
+      "installedAt": 1788269305856,
+      "ownerHandle": "wyuc"
+    }
+  }
+}

@@ -1,0 +1,381 @@
+{
+  "id": "conv-1784986427583-dvb6eqc95",
+  "providerId": "codex",
+  "title": "The user said \"你好\" (Hello) in response to a det...",
+  "titleGenerationStatus": "success",
+  "createdAt": 1784986427583,
+  "updatedAt": 1784986960199,
+  "lastResponseAt": 1784986960181,
+  "sessionId": "019f997b-6139-7be0-aee4-197b1928ee15",
+  "providerState": {
+    "threadId": "019f997b-6139-7be0-aee4-197b1928ee15",
+    "sessionFilePath": "C:\\Users\\xuxiu\\.codex\\sessions\\2026\\07\\25\\rollout-2026-07-25T21-33-52-019f997b-6139-7be0-aee4-197b1928ee15.jsonl",
+    "transcriptRootPath": "C:\\Users\\xuxiu\\.codex\\sessions"
+  },
+  "messages": [
+    {
+      "id": "msg-1784986427577-yuyupyx",
+      "role": "user",
+      "content": "你好",
+      "displayContent": "你好",
+      "timestamp": 1784986427577,
+      "userMessageId": "019f997b-75e7-76b1-b510-f0bdac35569f"
+    },
+    {
+      "id": "msg-1784986427651-2b8bbb5",
+      "role": "assistant",
+      "content": "你好！你的卡帕西（Karpathy）知识库大管家已上线。🤖\n\n我现在准备开始执行【第一步：素材扫描】。我将前往 `00_raw/` 文件夹读取前 3-5 篇文档，以便为你制定一份精准的 Wiki 计划表。\n\n请稍等，我正在检查素材库...\n\n",
+      "timestamp": 1784986427651,
+      "toolCalls": [
+        {
+          "id": "call_63037655ee514a0da16c04e5",
+          "name": "Bash",
+          "input": {
+            "command": "Get-ChildItem -Path \"00_raw\" -Recurse -File | Select-Object -First 10 FullName, Length"
+          },
+          "status": "completed",
+          "isExpanded": false,
+          "result": ""
+        }
+      ],
+      "contentBlocks": [
+        {
+          "type": "text",
+          "content": "你好！你的卡帕西（Karpathy）知识库大管家已上线。🤖\n\n我现在准备开始执行【第一步：素材扫描】。我将前往 `00_raw/` 文件夹读取前 3-5 篇文档，以便为你制定一份精准的 Wiki 计划表。\n\n请稍等，我正在检查素材库...\n\n",
+          "phase": "final_answer"
+        },
+        {
+          "type": "tool_use",
+          "toolId": "call_63037655ee514a0da16c04e5"
+        }
+      ],
+      "responseMetadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      }
+    },
+    {
+      "id": "msg-1784986455317-taab49r",
+      "role": "assistant",
+      "content": "看起来 `00_raw/` 文件夹是空的。让我检查一下整个 vault 的结构，看看素材可能在哪里。\n\n",
+      "timestamp": 1784986455317,
+      "toolCalls": [
+        {
+          "id": "call_e3f63e5dd0c043d0b1f1a6cc",
+          "name": "Bash",
+          "input": {
+            "command": "Get-ChildItem -Path \".\" -Directory | Select-Object Name"
+          },
+          "status": "completed",
+          "isExpanded": false,
+          "result": "\r\nName      \r\n----      \r\n.agents   \r\n.claude   \r\n.claudian \r\n.grimoire \r\n.obsidian \r\n00-导航     \r\nassets    \r\ndata      \r\nDIP-病种    \r\nDRG-分组    \r\nICD10-疾病诊断\r\nICD9-手术操作 \r\n_builder  \r\n_tools    \r\n_模板       \r\n速查手册      \r\n\r\n\r\n"
+        }
+      ],
+      "contentBlocks": [
+        {
+          "type": "text",
+          "content": "看起来 `00_raw/` 文件夹是空的。让我检查一下整个 vault 的结构，看看素材可能在哪里。\n\n",
+          "phase": "final_answer"
+        },
+        {
+          "type": "tool_use",
+          "toolId": "call_e3f63e5dd0c043d0b1f1a6cc"
+        }
+      ],
+      "responseMetadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      }
+    },
+    {
+      "id": "msg-1784986465107-wy2jnhm",
+      "role": "assistant",
+      "content": "发现你的 vault 结构和 AGENTS.md 中描述的 `00_raw/`、`30_wiki/` 等目录不一致。当前根目录下没有这些文件夹。让我进一步探索一下现有的结构，看看素材可能存放在哪里。",
+      "timestamp": 1784986465107,
+      "toolCalls": [],
+      "contentBlocks": [
+        {
+          "type": "text",
+          "content": "发现你的 vault 结构和 AGENTS.md 中描述的 `00_raw/`、`30_wiki/` 等目录不一致。当前根目录下没有这些文件夹。让我进一步探索一下现有的结构，看看素材可能存放在哪里。",
+          "phase": "final_answer"
+        }
+      ],
+      "responseMetadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      },
+      "assistantMessageId": "019f997b-75e7-76b1-b510-f0bdac35569f",
+      "durationSeconds": 37,
+      "durationFlavorWord": "Forged"
+    },
+    {
+      "id": "msg-1784986493647-u6ji7y3",
+      "role": "user",
+      "content": "好的，你帮我看一下知识库",
+      "displayContent": "好的，你帮我看一下知识库",
+      "timestamp": 1784986493647,
+      "userMessageId": "019f997c-62db-7ef0-bd54-3dc595da76fc"
+    },
+    {
+      "id": "msg-1784986493650-hg4lgl6",
+      "role": "assistant",
+      "content": "让我进一步看看这个知识库的结构和内容分布：\n\n",
+      "timestamp": 1784986493650,
+      "toolCalls": [
+        {
+          "id": "call_528a0a87f0cd4c8dbbb4972d",
+          "name": "Bash",
+          "input": {
+            "command": "Get-ChildItem -Path \".\" -Directory | ForEach-Object { \"$($_.Name) ($((Get-ChildItem $_.FullName -Recurse -File | Measure-Object).Count) files)\" }"
+          },
+          "status": "completed",
+          "isExpanded": false,
+          "result": ".agents (16 files)\r\n.claude (17 files)\r\n.claudian (13 files)\r\n.grimoire (2 files)\r\n.obsidian (27 files)\r\n00-导航 (6 files)\r\nassets (0 files)\r\ndata (0 files)\r\nDIP-病种 (21 files)\r\nDRG-分组 (1 files)\r\nICD10-疾病诊断 (287 files)\r\nICD9-手术操作 (19 files)\r\n_builder (485 files)\r\n_tools (5 files)\r\n_模板 (3 files)\r\n速查手册 (5 files)\r\n"
+        },
+        {
+          "id": "call_2f77856190c14cb9a9ff2762",
+          "name": "Bash",
+          "input": {
+            "command": "Get-ChildItem -Path \"00-导航\" -File | Select-Object Name, Length"
+          },
+          "status": "completed",
+          "isExpanded": false,
+          "result": "\r\nName            Length\r\n----            ------\r\nDataview查询示例.md   4447\r\n主索引.md            4365\r\n优化实施计划.md         6837\r\n健康报告.json        92300\r\n知识图谱.md           6899\r\n链接检查报告.json        441\r\n\r\n\r\n"
+        },
+        {
+          "id": "call_49fcf590fe7c46d88c624be1",
+          "name": "Bash",
+          "input": {
+            "command": "Get-ChildItem -Path \"00-导航\\主索引.md\" | Get-Content -Raw"
+          },
+          "status": "completed",
+          "isExpanded": false,
+          "result": "---\ntags:\n  - index\n  - home\n  - navigation\ncreated: 2026-06-18\nupdated: 2026-06-18\n---\n\n# 馃彞 ICD 缂栫爜鐭ヨ瘑搴?- 涓荤储寮?\n> 鍩轰簬 Karpathy LLM Wiki + SQLite 鏁版嵁椹卞姩鏋舵瀯銆?> Markdown 鍗虫簮鐮侊紝AI 鍗虫煡璇㈠紩鎿庯紝鏀规暟鎹嚜鍔ㄥ埛鏂扮瑪璁般€?\n---\n\n## 馃搱 鏁版嵁缁熻\n\n- **ICD-10 鐤剧梾璇婃柇**锛?3,304 鏉＄紪鐮侊紙22 绔狅級\n- **ICD-9 鎵嬫湳鎿嶄綔**锛?3,684 鏉＄紪鐮侊紙18 绔狅級\n- **DRG 2.0 鍒嗙粍**锛?6 MDC 路 409 ADRG 路 634 DRG\n  - 涓ラ噸鍚堝苟鐥?骞跺彂鐥囷紙MCC锛夛細148 缁?  - 涓€鑸悎骞剁棁/骞跺彂鐥囷紙CC锛夛細54 缁?  - 涓嶄即鍚堝苟鐥?骞跺彂鐥囷細126 缁?- **DIP 2.0 鐥呯**锛?,520 绉?\n---\n\n## 馃Л 蹇€熷鑸?\n### 馃摎 鏍稿績缂栫爜绯荤粺\n\n| 妯″潡 | 璇存槑 | 蹇€熷叆鍙?|\n|------|------|----------|\n| **[[ICD10-鐤剧梾璇婃柇/_index\\|ICD-10 璇婃柇]]** | 22绔?路 33,304 鏉＄紪鐮?| [[ICD10-鐤剧梾璇婃柇/_index\\|鏌ョ湅鍏ㄩ儴]] |\n| **[[ICD9-鎵嬫湳鎿嶄綔/_index\\|ICD-9 鎵嬫湳]]** | 18绔?路 13,684 鏉＄紪鐮?| [[ICD9-鎵嬫湳鎿嶄綔/_index\\|鏌ョ湅鍏ㄩ儴]] |\n| **[[DRG-鍒嗙粍/_index\\|DRG 2.0 鍒嗙粍]]** | 409 涓?DRG 缁?| [[DRG-鍒嗙粍/_index\\|鏌ョ湅鍏ㄩ儴]] |\n| **[[DIP-鐥呯/_index\\|DIP 2.0 鐥呯]]** | 9,520 涓梾绉?| [[DIP-鐥呯/_index\\|鏌ョ湅鍏ㄩ儴]] |\n\n### 馃攳 閫熸煡宸ュ叿\n\n| 宸ュ叿 | 鐢ㄩ€?| 閾炬帴 |\n|------|------|------|\n| **甯歌璇婃柇閫熸煡** | 楂橀璇婃柇缂栫爜 | [[閫熸煡鎵嬪唽/甯歌璇婃柇缂栫爜閫熸煡\\|鎵撳紑]] |\n| **甯歌鎵嬫湳閫熸煡** | 楂橀鎵嬫湳缂栫爜 | [[閫熸煡鎵嬪唽/甯歌鎵嬫湳缂栫爜閫熸煡\\|鎵撳紑]] |\n| **缂栫爜瑙勫垯瑕佺偣** | 鏍稿績缂栫爜瑙勫垯 | [[閫熸煡鎵嬪唽/缂栫爜瑙勫垯瑕佺偣\\|鎵撳紑]] |\n| **ICD-Web璋冭瘯閫熸煡** | Web搴旂敤璋冭瘯 | [[閫熸煡鎵嬪唽/ICD-Web璋冭瘯閫熸煡\\|鎵撳紑]] |\n\n---\n\n## 馃幆 浣跨敤鍦烘櫙\n\n### 馃 浣滀负 AI 鍔╂墜\n鐩存帴闂垜锛?- **鏌ョ紪鐮?*锛?\"鏌ユ壘 蹇冭倢姊楁 鐨勭紪鐮?\n- **鏌ヨ鍒?*锛?\"鑲跨槫缂栫爜瑙勫垯鏄粈涔?\n- **瀵规瘮鍒嗘瀽**锛?\"姣旇緝 ICD-10 鍜?ICD-9 鍦ㄥ績鑴忔墜鏈紪鐮佷笂鐨勫樊寮?\n- **鍒嗘瀽鍒嗙粍**锛?\"杩欎釜鐥呬緥搴旇鍒嗗埌鍝釜 DRG 缁?\n\n### 馃懆鈥嶁殨锔?浣滀负涓村簥鍖荤敓\n- 鏌ユ壘璇婃柇/鎵嬫湳鐨勬爣鍑嗙紪鐮?- 鐞嗚В缂栫爜瑙勫垯鍜屽悎骞剁紪鐮佸師鍒?- 浣跨敤閫熸煡鎵嬪唽蹇€熷畾浣嶅父鐢ㄧ紪鐮?\n### 馃懆鈥嶐煉?浣滀负缂栫爜鍛?- 楠岃瘉缂栫爜鐨勫噯纭€?- 瀛︿範缂栫爜瑙勫垯鍜屾渶浣冲疄璺?- 浣跨敤妗堜緥搴撳弬鑰冨疄闄呯紪鐮?\n---\n\n## 馃敡 鏁版嵁鏇存柊娴佺▼\n\n```bash\n# 1. 鏇存柊鏁版嵁搴?cd _builder\npython init_db.py\n\n# 2. 閲嶆柊鐢熸垚 Obsidian 绗旇\npython generate_md.py\n\n# 3. 瀵煎嚭缃戦〉鏁版嵁锛堝彲閫夛級\npython generate_web.py\n```\n\n---\n\n## 馃搳 鐭ヨ瘑鍥捐氨\n\n```mermaid\ngraph TB\n    A[涓荤储寮昡 --> B[ICD-10 鐤剧梾璇婃柇]\n    A --> C[ICD-9 鎵嬫湳鎿嶄綔]\n    A --> D[DRG 2.0 鍒嗙粍]\n    A --> E[DIP 2.0 鐥呯]\n    \n    B --> B1[22涓珷鑺俔\n    C --> C1[18涓珷鑺俔\n    D --> D1[26涓狹DC]\n    E --> E1[21涓珷鑺俔\n    \n    B1 --> B2[33,304鏉＄紪鐮乚\n    C1 --> C2[13,684鏉＄紪鐮乚\n    D1 --> D2[634涓狣RG]\n    E1 --> E2[9,520涓梾绉峕\n    \n    B --> F[閫熸煡鎵嬪唽]\n    C --> F\n    D --> F\n    E --> F\n```\n\n---\n\n## 馃敆 璺ㄦā鍧楀叧鑱?\n### ICD-10 鈫?ICD-9 鍏宠仈\n- 璇婃柇缂栫爜 鈫?鎵嬫湳鎿嶄綔缂栫爜\n- 鐤剧梾鍒嗙被 鈫?鎵嬫湳鍒嗙被\n\n### ICD-10/ICD-9 鈫?DRG 鍏宠仈\n- 璇婃柇缂栫爜 鈫?DRG 鍒嗙粍鏄犲皠\n- 鎵嬫湳缂栫爜 鈫?DRG 鍒嗙粍鏄犲皠\n- 鍚堝苟鐥?骞跺彂鐥?鈫?DRG 璋冩暣\n\n### ICD-10/ICD-9 鈫?DIP 鍏宠仈\n- 璇婃柇缂栫爜 鈫?DIP 鐥呯鏄犲皠\n- 鎵嬫湳缂栫爜 鈫?DIP 鐥呯鏄犲皠\n\n---\n\n## 馃摑 缁存姢鎸囧崡\n\n### 娣诲姞鏂板唴瀹?1. 浣跨敤 `_妯℃澘/` 涓殑妯℃澘\n2. 浣跨敤 `[[缂栫爜鍚嶇О]]` 閾炬帴鐩稿叧鐭ヨ瘑\n3. 浣跨敤 `#icd10`銆乣#icd9`銆乣#drg` 鎵撴爣绛?\n### 鏁版嵁璐ㄩ噺妫€鏌?- 纭繚 frontmatter 瀹屾暣\n- 楠岃瘉閾炬帴鏈夋晥鎬?- 妫€鏌ョ紪鐮佹牸寮忚鑼?\n---\n\n## 馃帗 瀛︿範璺緞\n\n### 鍒濆鑰?1. [[閫熸煡鎵嬪唽/缂栫爜瑙勫垯瑕佺偣|缂栫爜瑙勫垯瑕佺偣]]\n2. [[閫熸煡鎵嬪唽/甯歌璇婃柇缂栫爜閫熸煡|甯歌璇婃柇閫熸煡]]\n3. [[閫熸煡鎵嬪唽/甯歌鎵嬫湳缂栫爜閫熸煡|甯歌鎵嬫湳閫熸煡]]\n\n### 杩涢樁鑰?1. [[ICD10-鐤剧梾璇婃柇/_index|ICD-10 鎬昏]]\n2. [[ICD9-鎵嬫湳鎿嶄綔/_index|ICD-9 鎬昏]]\n3. [[DRG-鍒嗙粍/_index|DRG 鍒嗙粍]]\n\n### 涓撳绾?1. 璺ㄦā鍧楀叧鑱斿垎鏋?2. 鏁版嵁璐ㄩ噺浼樺寲\n3. 鐭ヨ瘑鍥捐氨鏋勫缓\n\n---\n\n## 馃摓 鎶€鏈敮鎸?\n- **鏁版嵁闂**锛氭鏌?`_builder/` 鐩綍涓嬬殑鑴氭湰\n- **閾炬帴闂**锛氫娇鐢?Obsidian 鐨勯摼鎺ユ鏌ュ姛鑳?- **鏍煎紡闂**锛氬弬鑰?`_妯℃澘/` 涓殑妯℃澘\n\n---\n\n**鏈€鍚庢洿鏂?*锛?026-06-18\n**鐗堟湰**锛歷1.0\n**缁存姢鑰?*锛欳laudian AI Assistant\r\n"
+        }
+      ],
+      "contentBlocks": [
+        {
+          "type": "tool_use",
+          "toolId": "call_528a0a87f0cd4c8dbbb4972d"
+        },
+        {
+          "type": "text",
+          "content": "让我进一步看看这个知识库的结构和内容分布：\n\n",
+          "phase": "final_answer"
+        },
+        {
+          "type": "tool_use",
+          "toolId": "call_2f77856190c14cb9a9ff2762"
+        },
+        {
+          "type": "tool_use",
+          "toolId": "call_49fcf590fe7c46d88c624be1"
+        }
+      ],
+      "responseMetadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      }
+    },
+    {
+      "id": "msg-1784986521972-0yv8707",
+      "role": "assistant",
+      "content": "这是一个**医疗编码知识库**，主要包含以下内容：",
+      "timestamp": 1784986521972,
+      "toolCalls": [],
+      "contentBlocks": [
+        {
+          "type": "text",
+          "content": "这是一个**医疗编码知识库**，主要包含以下内容：",
+          "phase": "final_answer"
+        }
+      ],
+      "responseMetadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      },
+      "assistantMessageId": "019f997c-62db-7ef0-bd54-3dc595da76fc",
+      "durationSeconds": 28,
+      "durationFlavorWord": "Fermented"
+    },
+    {
+      "id": "msg-1784986568542-d2696ov",
+      "role": "user",
+      "content": "你好",
+      "displayContent": "你好",
+      "timestamp": 1784986568542,
+      "userMessageId": "019f997d-8768-7ce2-b619-caba6a529611"
+    },
+    {
+      "id": "msg-1784986568546-adh0cj4",
+      "role": "assistant",
+      "content": "你好！你的卡帕西（Karpathy）知识库大管家已上线。🤖\n\n我现在准备开始执行【第一步：素材扫描】。我将前往 `00_raw/` 文件夹读取前 3-5 篇文档，以便为你制定一份精准的 Wiki 计划表。\n\n请稍等，我正在检查素材库...",
+      "timestamp": 1784986568546,
+      "toolCalls": [],
+      "contentBlocks": [
+        {
+          "type": "text",
+          "content": "你好！你的卡帕西（Karpathy）知识库大管家已上线。🤖\n\n我现在准备开始执行【第一步：素材扫描】。我将前往 `00_raw/` 文件夹读取前 3-5 篇文档，以便为你制定一份精准的 Wiki 计划表。\n\n请稍等，我正在检查素材库...",
+          "phase": "final_answer"
+        }
+      ],
+      "responseMetadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      },
+      "assistantMessageId": "019f997d-8768-7ce2-b619-caba6a529611",
+      "durationSeconds": 3,
+      "durationFlavorWord": "Forged"
+    },
+    {
+      "id": "msg-1784986949896-ja2o4qh",
+      "role": "user",
+      "content": "你好",
+      "displayContent": "你好",
+      "timestamp": 1784986949896,
+      "userMessageId": "019f9983-5913-7631-ab30-83ae26b2ccb8"
+    },
+    {
+      "id": "msg-1784986949901-id4g3cs",
+      "role": "assistant",
+      "content": "你好！你的卡帕西（Karpathy）知识库大管家已上线。🤖\n\n我现在准备开始执行【第一步：素材扫描】。我将前往 `00_raw/` 文件夹读取前 3-5 篇文档，以便为你制定一份精准的 Wiki 计划表。\n\n请稍等，我正在检查素材库...",
+      "timestamp": 1784986949901,
+      "toolCalls": [],
+      "contentBlocks": [
+        {
+          "type": "text",
+          "content": "你好！你的卡帕西（Karpathy）知识库大管家已上线。🤖\n\n我现在准备开始执行【第一步：素材扫描】。我将前往 `00_raw/` 文件夹读取前 3-5 篇文档，以便为你制定一份精准的 Wiki 计划表。\n\n请稍等，我正在检查素材库...",
+          "phase": "final_answer"
+        }
+      ],
+      "responseMetadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      },
+      "assistantMessageId": "019f9983-5913-7631-ab30-83ae26b2ccb8",
+      "durationSeconds": 10,
+      "durationFlavorWord": "Finagled"
+    }
+  ],
+  "usage": {
+    "inputTokens": 20788,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 20480,
+    "contextWindow": 258400,
+    "contextWindowIsAuthoritative": true,
+    "contextTokens": 20788,
+    "percentage": 8,
+    "model": "gpt-5.5"
+  },
+  "assistantResponseMetadata": [
+    {
+      "assistantMessageIndex": 0,
+      "metadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      }
+    },
+    {
+      "assistantMessageIndex": 1,
+      "metadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      }
+    },
+    {
+      "assistantMessageIndex": 2,
+      "assistantMessageId": "019f997b-75e7-76b1-b510-f0bdac35569f",
+      "metadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      }
+    },
+    {
+      "assistantMessageIndex": 3,
+      "metadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      }
+    },
+    {
+      "assistantMessageIndex": 4,
+      "assistantMessageId": "019f997c-62db-7ef0-bd54-3dc595da76fc",
+      "metadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      }
+    },
+    {
+      "assistantMessageIndex": 5,
+      "assistantMessageId": "019f997d-8768-7ce2-b619-caba6a529611",
+      "metadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      }
+    },
+    {
+      "assistantMessageIndex": 6,
+      "assistantMessageId": "019f9983-5913-7631-ab30-83ae26b2ccb8",
+      "metadata": {
+        "providerId": "codex",
+        "providerLabel": "Codex",
+        "model": "gpt-5.5",
+        "modelLabel": "GPT-5.5",
+        "effort": "high",
+        "effortLabel": "High"
+      }
+    }
+  ]
+}

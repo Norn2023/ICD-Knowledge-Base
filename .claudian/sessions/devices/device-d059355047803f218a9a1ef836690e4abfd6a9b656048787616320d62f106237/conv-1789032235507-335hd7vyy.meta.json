@@ -1,0 +1,20 @@
+{
+  "id": "conv-1789032235507-335hd7vyy",
+  "providerId": "claude",
+  "title": "问候问候",
+  "titleGenerationStatus": "success",
+  "createdAt": 1789032235514,
+  "lastActivityAt": 1789042819247,
+  "sessionId": null,
+  "selectedModel": "haiku",
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 546,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 180224,
+    "contextWindow": 200000,
+    "contextTokens": 180770,
+    "percentage": 90,
+    "contextWindowIsAuthoritative": true
+  }
+}

@@ -158,3 +158,69 @@ CREATE TABLE case_procedures (
     FOREIGN KEY (case_id) REFERENCES cases(id),
     FOREIGN KEY (icd9_id) REFERENCES icd9_codes(id)
 );
+
+-- ── 中英文医学文献库 ──────────────────────────────────────
+
+CREATE TABLE literature (
+    id          INTEGER PRIMARY KEY,
+    pmid        TEXT UNIQUE,               -- PubMed ID (英文文献)
+    title       TEXT NOT NULL,             -- 英文标题
+    title_cn    TEXT,                      -- 中文标题
+    authors     TEXT,                      -- 作者列表 (JSON array)
+    journal     TEXT,                      -- 期刊名称
+    year        INTEGER,                   -- 出版年份
+    doi         TEXT,                      -- DOI
+    abstract    TEXT,                      -- 摘要
+    full_text   TEXT,                      -- 全文
+    keywords    TEXT,                      -- 关键词 (JSON array)
+    lang        TEXT DEFAULT 'en',         -- en / zh
+    source      TEXT DEFAULT 'PubMed',     -- PubMed / CNKI / 本地PDF / 手动
+    url         TEXT,                      -- 原文链接
+    pdf_path    TEXT,                      -- 本地 PDF 文件路径（相对于 literature/）
+    notes       TEXT,                      -- 备注
+    created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_literature_year ON literature(year);
+CREATE INDEX idx_literature_journal ON literature(journal);
+CREATE INDEX idx_literature_lang ON literature(lang);
+
+-- 全文搜索索引（中英文混合）
+CREATE VIRTUAL TABLE literature_fts USING fts5(
+    title, title_cn, abstract, full_text, keywords,
+    content='literature',
+    content_rowid='id',
+    tokenize='unicode61 remove_diacritics 2'
+);
+
+-- 触发同步 FTS（日常增删改自动维护）
+CREATE TRIGGER literature_ai AFTER INSERT ON literature BEGIN
+    INSERT INTO literature_fts(rowid, title, title_cn, abstract, full_text, keywords)
+    VALUES (new.id, new.title, new.title_cn, new.abstract, new.full_text, new.keywords);
+END;
+
+CREATE TRIGGER literature_ad AFTER DELETE ON literature BEGIN
+    INSERT INTO literature_fts(literature_fts, rowid, title, title_cn, abstract, full_text, keywords)
+    VALUES ('delete', old.id, old.title, old.title_cn, old.abstract, old.full_text, old.keywords);
+END;
+
+CREATE TRIGGER literature_au AFTER UPDATE ON literature BEGIN
+    INSERT INTO literature_fts(literature_fts, rowid, title, title_cn, abstract, full_text, keywords)
+    VALUES ('delete', old.id, old.title, old.title_cn, old.abstract, old.full_text, old.keywords);
+    INSERT INTO literature_fts(rowid, title, title_cn, abstract, full_text, keywords)
+    VALUES (new.id, new.title, new.title_cn, new.abstract, new.full_text, new.keywords);
+END;
+
+-- AI 问答对话记录
+CREATE TABLE qa_log (
+    id          INTEGER PRIMARY KEY,
+    query       TEXT NOT NULL,             -- 用户提问
+    answer      TEXT NOT NULL,             -- AI 回答
+    sources     TEXT,                      -- 引用文献列表 (JSON array of literature.id)
+    model       TEXT DEFAULT 'local',      -- 使用的模型
+    tokens_in   INTEGER,                   -- 输入 token 数
+    tokens_out  INTEGER,                   -- 输出 token 数
+    time_ms     INTEGER,                   -- 响应耗时(毫秒)
+    created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+);

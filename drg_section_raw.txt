@@ -1,0 +1,59 @@
+<!-- DRG -->
+<div id="t-drg" class="tab">
+<h3 style="margin-bottom:4px">CHS-DRG 分组器</h3>
+<div id="drg-status" style="font-size:.75em;color:var(--text-dim);margin-bottom:10px">DRG数据: <span id="ds2">预加载中...</span> <span style="margin-left:12px">3.0:</span> <span id="ds3">预加载中...</span> <span style="margin-left:12px">分组版本: </span><select id="drg-ver" style="font-size:.82em;padding:3px 8px;border:1px solid var(--border);border-radius:var(--r-xs);background:var(--bg-card);color:var(--text)" onchange="dr()"><option value="nat">全国 CHS-DRG 2.0</option><option value="chs3">全国 CHS-DRG 3.0</option><option value="linfen">山西临汾 CHS-DRG-SX2026</option></select></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+<div class="drgbox">
+<h4>疾病诊断 (ICD-10)</h4>
+<div style="margin-bottom:10px">
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">主要诊断（仅一个）</div>
+<div class="sug-rel"><div class="drg-inp"><input id="di" placeholder="编码或关键字..." oninput="sdx('di','ds')" onkeydown="if(event.key==='Enter'){event.preventDefault();adx()}"></div>
+<div class="sug" id="ds"></div></div>
+<div class="chips" id="dc"></div></div>
+<div>
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">其他诊断（可多个）</div>
+<div class="sug-rel"><div class="drg-inp"><input id="d2" placeholder="编码或关键字..." oninput="sdx('d2','d2s')" onkeydown="if(event.key==='Enter'){event.preventDefault();adx2()}"></div>
+<div class="sug" id="d2s"></div></div>
+<div class="chips col" id="d2c"></div></div>
+</div>
+<div class="drgbox">
+<h4>手术操作 (ICD-9)</h4>
+<div style="margin-bottom:10px">
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">主要手术操作（仅一个）</div>
+<div class="sug-rel"><div class="drg-inp"><input id="pi" placeholder="编码或关键字..." oninput="spx('pi','ps')" onkeydown="if(event.key==='Enter'){event.preventDefault();apx()}"></div>
+<div class="sug" id="ps"></div></div>
+<div class="chips" id="pc"></div></div>
+<div>
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">其他手术操作（可多个）</div>
+<div class="sug-rel"><div class="drg-inp"><input id="p2" placeholder="编码或关键字..." oninput="spx('p2','p2s')" onkeydown="if(event.key==='Enter'){event.preventDefault();apx2()}"></div>
+<div class="sug" id="p2s"></div></div>
+<div class="chips col" id="p2c"></div></div>
+</div>
+</div>
+	<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0 8px 0;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);font-size:.8em">
+	<label style="display:flex;align-items:center;gap:4px">性别 <select id="gdr" style="width:56px;font-size:.9em" onchange="dr()"><option value="">不限</option><option value="M">男</option><option value="F">女</option></select></label>
+	<label style="display:flex;align-items:center;gap:4px">出生日期 <input id="bdt" type="text" placeholder="YYYY-MM-DD" style="width:110px;font-size:.9em" oninput="calAge();dr()"></label>
+	<label style="display:flex;align-items:center;gap:4px">入院日期 <input id="adt" type="text" placeholder="YYYY-MM-DD" style="width:110px;font-size:.9em" oninput="calAge();dr()"></label>
+	<span id="age-disp" style="color:var(--accent);font-weight:600;font-size:.85em"></span>
+	<label style="display:flex;align-items:center;gap:4px;margin-left:6px">住院天数 <input id="los" type="number" min="1" style="width:52px;font-size:.9em" placeholder="天" onchange="dr()"></label>
+	<label style="display:flex;align-items:center;gap:4px">离院方式 <select id="dis" style="width:80px;font-size:.9em" onchange="dr()"><option value="">—</option><option value="1">医嘱离院</option><option value="2">非医嘱</option><option value="3">死亡</option><option value="4">转院</option></select></label>
+	<label style="display:flex;align-items:center;gap:4px">医院等级 <select id="hosp-lv" style="width:64px;font-size:.9em" onchange="dr()"><option value="3">三级</option><option value="2">二级</option><option value="1">一级</option></select></label>
+	<span style="font-size:.72em;color:var(--text-dim)">住院天数/离院方式/医院等级仅影响费用结算，不影响分组</span>
+	</div>
+<button class="btn-drg" onclick="try{document.getElementById('drr').innerHTML='<div class=clr>⏳ 正在查询...</div>';dr()}catch(e){document.getElementById('drr').innerHTML='<div class=clr>❌ JS错误: '+e.message+'</div>'}">查询 DRG 入组</button>
+<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:10px;margin-bottom:16px;font-size:.78em;color:var(--text-dim)">
+<b>DRG 编码说明：</b>
+后缀 <span style="color:var(--danger);font-weight:600">1</span>=MCC(严重合并症) |
+<span style="color:var(--warning);font-weight:600">3</span>=CC(一般合并症) |
+<span style="color:var(--success);font-weight:600">5</span>=不伴合并症 |
+<span style="font-weight:600">9</span>=未细分(无MCC/CC拆分)
+</div>
+
+
+
+
+
+<div id="qy-warn"></div>
+<div id="drr"><div class="emp"><p>添加诊断和手术，查询 DRG 分组</p></div></div>
+</div>
+

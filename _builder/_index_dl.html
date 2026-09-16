@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ICD ç¼ç ç¥è¯åº</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+<header><h1>ICD ç¼ç ç¥è¯åº</h1>
+<div class="sub">ICD-10 Â· ICD-9 Â· DIP Â· DRG</div>
+<nav>
+<button class="active" onclick="st('icd10')">ICD-10</button>
+<button onclick="st('icd9')">ICD-9</button>
+<button onclick="st('drg')">DRG</button>
+<button onclick="st('dip')">DIP</button>
+<button onclick="st('convert')">ç¼ç è½¬æ¢</button>
+</nav></header>
+
+<div id="load" style="text-align:center;padding:80px">
+<div style="display:inline-block;width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:s .8s linear infinite;margin-bottom:16px"></div>
+<p style="color:var(--text-dim)">å è½½ä¸­...</p></div>
+<main style="display:none">
+
+<!-- ICD-10 -->
+<div id="t-icd10" class="tab active">
+<div class="sr"><input id="q10" placeholder="æç´¢ ICD-10..." oninput="s10()" autofocus></div>
+<div class="info" id="i10"></div>
+<div class="tbl-wrap"><table><thead><tr><th>ç¾çç¼ç ï¼å»ä¿2.0ï¼</th><th>è¯æ­åç§°ï¼å»ä¿2.0ï¼</th><th>ç¾çç¼ç ï¼å½ä¸´çï¼</th><th>è¯æ­åç§°ï¼å½ä¸´çï¼</th><th>å¯¹æ¯</th><th>ä¸ä½ä¸ºä¸»è¯</th></tr></thead><tbody id="b10"></tbody></table></div>
+</div>
+
+<!-- ICD-9 -->
+<div id="t-icd9" class="tab">
+<div class="sr"><input id="q9" placeholder="æç´¢ ICD-9..." oninput="s9()"></div>
+<div class="info" id="i9"></div>
+<div class="tbl-wrap"><table><thead><tr><th>ææ¯æä½ç¼ç ï¼å»ä¿2.0ï¼</th><th>ææ¯æä½åç§°ï¼å»ä¿2.0ï¼</th><th>ææ¯æä½ç¼ç ï¼å½ä¸´çï¼</th><th>ææ¯æä½åç§°ï¼å½ä¸´çï¼</th><th>å¯¹æ¯</th><th>ç±»å«</th><th>å½å¥</th><th>ä¸ä½ä¸ºä¸»ææ¯</th></tr></thead><tbody id="b9"></tbody></table></div>
+</div>
+
+<!-- DRG -->
+<div id="t-drg" class="tab">
+<h3 style="margin-bottom:4px">CHS-DRG 2.0 åç»å¨</h3>
+<div id="drg-status" style="font-size:.75em;color:var(--text-dim);margin-bottom:10px">DRGæ°æ®: <span id="ds2">é¢å è½½ä¸­...</span> <span style="margin-left:12px">åç»çæ¬: </span><select id="drg-ver" style="font-size:.82em;padding:3px 8px;border:1px solid var(--border);border-radius:var(--r-xs);background:var(--bg-card);color:var(--text)" onchange="dr()"><option value="nat">å¨å½ CHS-DRG 2.0</option><option value="linfen">å±±è¥¿ä¸´æ±¾ CHS-DRG-SX2026</option></select></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+<div class="drgbox">
+<h4>ç¾çè¯æ­ (ICD-10)</h4>
+<div style="margin-bottom:10px">
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">ä¸»è¦è¯æ­ï¼ä»ä¸ä¸ªï¼</div>
+<div class="sug-rel"><div class="drg-inp"><input id="di" placeholder="ç¼ç æå³é®å­..." oninput="sdx('di','ds')" onkeydown="if(event.key==='Enter'){event.preventDefault();adx()}"></div>
+<div class="sug" id="ds"></div></div>
+<div class="chips" id="dc"></div></div>
+<div>
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">å¶ä»è¯æ­ï¼å¯å¤ä¸ªï¼</div>
+<div class="sug-rel"><div class="drg-inp"><input id="d2" placeholder="ç¼ç æå³é®å­..." oninput="sdx('d2','d2s')" onkeydown="if(event.key==='Enter'){event.preventDefault();adx2()}"></div>
+<div class="sug" id="d2s"></div></div>
+<div class="chips col" id="d2c"></div></div>
+</div>
+<div class="drgbox">
+<h4>ææ¯æä½ (ICD-9)</h4>
+<div style="margin-bottom:10px">
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">ä¸»è¦ææ¯æä½ï¼ä»ä¸ä¸ªï¼</div>
+<div class="sug-rel"><div class="drg-inp"><input id="pi" placeholder="ç¼ç æå³é®å­..." oninput="spx('pi','ps')" onkeydown="if(event.key==='Enter'){event.preventDefault();apx()}"></div>
+<div class="sug" id="ps"></div></div>
+<div class="chips" id="pc"></div></div>
+<div>
+<div style="font-size:.78em;color:var(--text-dim);margin-bottom:3px">å¶ä»ææ¯æä½ï¼å¯å¤ä¸ªï¼</div>
+<div class="sug-rel"><div class="drg-inp"><input id="p2" placeholder="ç¼ç æå³é®å­..." oninput="spx('p2','p2s')" onkeydown="if(event.key==='Enter'){event.preventDefault();apx2()}"></div>
+<div class="sug" id="p2s"></div></div>
+<div class="chips col" id="p2c"></div></div>
+</div>
+</div>
+	<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0 8px 0;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);font-size:.8em">
+	<label style="display:flex;align-items:center;gap:4px">æ§å« <select id="gdr" style="width:56px;font-size:.9em" onchange="dr()"><option value="">ä¸é</option><option value="M">ç·</option><option value="F">å¥³</option></select></label>
+	<label style="display:flex;align-items:center;gap:4px">åºçæ¥æ <input id="bdt" type="text" placeholder="YYYY-MM-DD" style="width:110px;font-size:.9em" oninput="calAge();dr()"></label>
+	<label style="display:flex;align-items:center;gap:4px">å¥é¢æ¥æ <input id="adt" type="text" placeholder="YYYY-MM-DD" style="width:110px;font-size:.9em" oninput="calAge();dr()"></label>
+	<span id="age-disp" style="color:var(--accent);font-weight:600;font-size:.85em"></span>
+	<label style="display:flex;align-items:center;gap:4px;margin-left:6px">ä½é¢å¤©æ° <input id="los" type="number" min="1" style="width:52px;font-size:.9em" placeholder="å¤©" onchange="dr()"></label>
+	<label style="display:flex;align-items:center;gap:4px">ç¦»é¢æ¹å¼ <select id="dis" style="width:80px;font-size:.9em" onchange="dr()"><option value="">â</option><option value="1">å»å±ç¦»é¢</option><option value="2">éå»å±</option><option value="3">æ­»äº¡</option><option value="4">è½¬é¢</option></select></label>
+	<label style="display:flex;align-items:center;gap:4px">å»é¢ç­çº§ <select id="hosp-lv" style="width:64px;font-size:.9em" onchange="dr()"><option value="3">ä¸çº§</option><option value="2">äºçº§</option><option value="1">ä¸çº§</option></select></label>
+	<span style="font-size:.72em;color:var(--text-dim)">ä½é¢å¤©æ°/ç¦»é¢æ¹å¼/å»é¢ç­çº§ä»å½±åè´¹ç¨ç»ç®ï¼ä¸å½±ååç»</span>
+	</div>
+<button class="btn-drg" onclick="try{document.getElementById('drr').innerHTML='<div class=clr>â³ æ­£å¨æ¥è¯¢...</div>';dr()}catch(e){document.getElementById('drr').innerHTML='<div class=clr>â JSéè¯¯: '+e.message+'</div>'}">æ¥è¯¢ DRG å¥ç»</button>
+<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:10px;margin-bottom:16px;font-size:.78em;color:var(--text-dim)">
+<b>DRG ç¼ç è¯´æï¼</b>
+åç¼ <span style="color:var(--danger);font-weight:600">1</span>=MCC(ä¸¥éåå¹¶ç) |
+<span style="color:var(--warning);font-weight:600">3</span>=CC(ä¸è¬åå¹¶ç) |
+<span style="color:var(--success);font-weight:600">5</span>=ä¸ä¼´åå¹¶ç |
+<span style="font-weight:600">9</span>=æªç»å(æ MCC/CCæå)
+</div>
+
+
+
+<!-- âââ MCC ç¼ç æ¥è¯¢ï¼æç´¢+åè¡¨ï¼ âââ -->
+<details id="mcc-ref" style="margin-bottom:8px">
+<summary style="cursor:pointer;font-weight:600;font-size:.92em;padding:6px 0;color:var(--danger)">MCC ä¸¥éåå¹¶ç/å¹¶åç ç¼ç æ¥è¯¢ï¼4,477æ¡ Â· å¯æç¼ç /åç§°/è¯æ­æ åæç´¢ï¼</summary>
+<div style="margin-top:8px">
+<div class="sr"><input id="mcc-q" placeholder="æç´¢ MCC ç¼ç /åç§°/è¯æ­æ å/çç¶/æ£éª..." oninput="_searchMcc()"></div>
+<div class="info" id="mcc-info"></div>
+<div class="tbl-wrap" style="max-height:55vh"><table>
+<thead><tr><th style="min-width:78px">ç¾çç¼ç </th><th style="min-width:130px">ç¾çåç§°</th><th style="min-width:70px">äºç®ä»£ç </th><th style="min-width:90px">äºç®åç§°</th><th style="min-width:160px">è¯æ­æ åï¼ç¹å»å±å¼è¯¦æï¼</th><th style="min-width:70px">å¤æ³¨</th></tr></thead>
+<tbody id="mcc-tb"><tr><td colspan="6" class="emp">å±å¼åèªå¨å è½½ MCC ç¼ç åè¡¨...</td></tr></tbody></table></div>
+<div id="mcc-page" style="text-align:center;margin-top:8px;font-size:.78em;display:flex;gap:4px;justify-content:center;flex-wrap:wrap"></div>
+<div style="margin-top:10px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);font-size:.72em;color:var(--text-dim);line-height:1.8">
+<b>è¯´æï¼</b>â  ç¹å»ç¼ç è¡å±å¼æ¥çè¯¦ç»è¯æ­æ åï¼çç¶/æ£éª/æ£æ¥/ççï¼ â¡ çº¦100ä¸ªéç¹MCCç¼ç æè¯¦ç»è¯æ­æ åï¼å¶ä½ç¼ç æICD-10ç« èå½ç±» â¢ è¯æ­æ åä»ä¾ä¸´åºåèï¼å·ä½MCCå¤å®ä»¥CHS-DRG 2.0åç»æ¹æ¡ä¸ºå â£ MCCå±<b>4,477æ¡</b>ï¼CCå±<b>8,008æ¡</b>
+</div>
+</div>
+</details>
+
+
+
+
+<div id="qy-warn"></div>
+<div id="drr"><div class="emp"><p>æ·»å è¯æ­åææ¯ï¼æ¥è¯¢ DRG åç»</p></div></div>
+
+<!-- âââ æ¹éå¥ç»åæ âââ -->
+<details id="batch-section" style="margin-top:16px">
+<summary style="cursor:pointer;font-weight:600;font-size:.92em;padding:6px 0;color:var(--accent)">æ¹éå¥ç»åæ</summary>
+<div style="margin-top:10px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+<div class="upload-box">
+<div style="font-weight:600;font-size:.84em;margin-bottom:8px">ð çæ¡é¦é¡µä¸ä¼ </div>
+<div class="upload-area" id="img-drop" onclick="document.getElementById('img-file').click()">
+<div style="font-size:1.6em;margin-bottom:2px">ð¼ï¸</div>
+<div style="font-size:.82em">ç¹å»æææ½ä¸ä¼  JPG/PNG/PDF</div>
+<div style="font-size:.7em;color:var(--text-dim)">çæ¡é¦é¡µ / å»ä¿ç»ç®æ¸å</div>
+<input type="file" id="img-file" accept="image/*,.pdf" style="display:none" onchange="handleImg(event)">
+</div>
+<div id="img-pr" style="margin-top:8px;display:none"></div>
+</div>
+<div class="upload-box">
+<div style="font-weight:600;font-size:.84em;margin-bottom:8px">ð åºé¢æ°æ®ä¸ä¼ </div>
+<div class="upload-area" id="xls-drop" onclick="document.getElementById('xls-file').click()">
+<div style="font-size:1.6em;margin-bottom:2px">ð</div>
+<div style="font-size:.82em">ç¹å»æææ½ä¸ä¼  Excel (.xlsx/.xls)</div>
+<div style="font-size:.7em;color:var(--text-dim)">å«è¯æ­+ææ¯ç¼ç ï¼èªå¨æ¹éDRGå¥ç»</div>
+<input type="file" id="xls-file" accept=".xlsx,.xls" style="display:none" onchange="handleXls(event)">
+</div>
+<div id="xls-stat" style="font-size:.75em;color:var(--text-dim);margin-top:6px"></div>
+</div>
+</div>
+<div id="col-map" style="display:none;margin-bottom:12px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);font-size:.78em"></div>
+<div id="batch-res" style="margin-top:12px"></div>
+</div>
+</details>
+</div>
+
+<!-- DIP 2.0 -->
+	<div id="t-dip" class="tab">
+	<h3 style="margin-bottom:2px">DIP 2.0 åç»å¨</h3>
+	<div id="dip-status" style="font-size:.75em;color:var(--text-dim);margin-bottom:8px">DIPæ°æ®: <span id="dip-ds2">å·²å°±ç»ª (9,520æ ¸å¿çç§)</span> <span style="margin-left:12px">åç»çæ¬: </span><select id="dip-ver" style="font-size:.82em;padding:3px 8px;border:1px solid var(--border);border-radius:var(--r-xs);background:var(--bg-card);color:var(--text)" onchange="dipVer()"><option value="">å½å®¶ DIP 2.0</option><option value="gd_meizhou">å¹¿ä¸Â·æ¢å· DIP 2.0</option><option value="fj_xiamen">ç¦å»ºÂ·å¦é¨ DIP 2.0</option><option value="js_lyg">æ±èÂ·è¿äºæ¸¯ DIP 2.0</option></select></div>
+	<div id="dip-ver-info" style="font-size:.72em;color:var(--text-dim);margin-bottom:10px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm)">å½å®¶ DIP 2.0 ç Â· 9,520ç»æ ¸å¿çç§(ææ¯æä½6,311+ä¿å®æ²»ç3,209) Â· è¦ç95%ä»¥ä¸åºé¢çä¾ Â· 2025å¹´èµ·å¨å½ç»ä¸æ§è¡</div>
+
+	<!-- âââ ä¸»ç®å½ âââ -->
+	<details open style="margin-bottom:12px">
+	<summary style="cursor:pointer;font-weight:600;font-size:.92em;padding:6px 0;color:var(--accent)">ä¸»ç®å½ï¼çç§åç»å¹éï¼è¯æ­ + ææ¯æä½ â DIP çç§ç»ï¼</summary>
+	<div style="margin-top:8px">
+
+	<!-- Payment parameters -->
+	<div class="dip-params">
+	<label>ç¹å¼ <input id="dpv" type="number" value="13000" style="width:70px" onchange="dipCalc()"> å/å</label>
+	<label>æºæç­çº§ <select id="dip-lv" onchange="dipCalc()"><option value="1.0">ä¸çº§ 1.0</option><option value="0.8">äºçº§ 0.8</option><option value="0.6">ä¸çº§ 0.6</option></select></label>
+	</div>
+
+	<!-- Input area -->
+	<div class="dip-input-row">
+	<div class="dip-col">
+	<div style="margin-bottom:10px">
+	<div style="font-size:.78em;color:var(--text-dim);margin-bottom:4px;font-weight:600">ä¸»è¦è¯æ­ (ICD-10ï¼ä»ä¸ä¸ª)</div>
+	<div class="sug-rel"><div class="drg-inp"><input id="dip-di" placeholder="ç¼ç æå³é®å­..." oninput="sdip('dip-di','dip-ds')" onkeydown="if(event.key==='Enter'){event.preventDefault();adipp()}"></div>
+	<div class="sug" id="dip-ds"></div></div>
+	<div class="chips" id="dip-dc"></div>
+	</div>
+	<div>
+	<div style="font-size:.78em;color:var(--text-dim);margin-bottom:4px;font-weight:600">å¶ä»è¯æ­ï¼å¯å¤ä¸ªï¼</div>
+	<div class="sug-rel"><div class="drg-inp"><input id="dip-d2" placeholder="ç¼ç æå³é®å­..." oninput="sdip('dip-d2','dip-d2s')" onkeydown="if(event.key==='Enter'){event.preventDefault();adipp2()}"></div>
+	<div class="sug" id="dip-d2s"></div></div>
+	<div class="chips col" id="dip-d2c"></div>
+	</div>
+	</div>
+	<div class="dip-col">
+	<div style="margin-bottom:10px">
+	<div style="font-size:.78em;color:var(--text-dim);margin-bottom:4px;font-weight:600">ä¸»è¦ææ¯æä½ (ICD-9ï¼ä»ä¸ä¸ª)</div>
+	<div class="sug-rel"><div class="drg-inp"><input id="dip-pi" placeholder="ç¼ç æå³é®å­..." oninput="spdip('dip-pi','dip-ps')" onkeydown="if(event.key==='Enter'){event.preventDefault();adippx()}"></div>
+	<div class="sug" id="dip-ps"></div></div>
+	<div class="chips" id="dip-pc"></div>
+	</div>
+	<div>
+	<div style="font-size:.78em;color:var(--text-dim);margin-bottom:4px;font-weight:600">å¶ä»ææ¯æä½ï¼å¯å¤ä¸ªï¼</div>
+	<div class="sug-rel"><div class="drg-inp"><input id="dip-p2" placeholder="ç¼ç æå³é®å­..." oninput="spdip('dip-p2','dip-p2s')" onkeydown="if(event.key==='Enter'){event.preventDefault();adippx2()}"></div>
+	<div class="sug" id="dip-p2s"></div></div>
+	<div class="chips col" id="dip-p2c"></div>
+	</div>
+	</div>
+	</div>		</div>
+		</details>
+
+
+	<!-- âââ è¾å©ç®å½ âââ -->
+	<details style="margin-bottom:12px">
+	<summary style="cursor:pointer;font-weight:600;font-size:.92em;padding:6px 0;color:var(--warning)">è¾å©ç®å½ï¼æ¯ä»æ ¡æ­£ï¼å¯¹ä¸»ç®å½åå¼è¿è¡æ­£å/è´åè°æ´ï¼</summary>
+	<div style="margin-top:8px;display:flex;flex-direction:column;gap:10px">
+
+	<!-- ç¾çä¸¥éç¨åº¦è¾å©ç®å½ -->
+	<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+	<div style="font-weight:600;font-size:.82em;margin-bottom:8px;color:var(--success)">ç¾çä¸¥éç¨åº¦è¾å©ç®å½ï¼æ­£åæ ¡æ­£ â çæè¶éæ¯ä»è¶é«ï¼</div>
+	<div class="dip-params" style="margin-bottom:0">
+	<label>CCIææ° <select id="dip-cci" onchange="dipCalc()"><option value="1.0">æ åå¹¶ç 1.0</option><option value="0.95">CCI=0 0.95</option><option value="1.35">CCIâ¥3 1.35</option></select></label>
+	<label>å¹´é¾ç¹å¾ <select id="dip-age" onchange="dipCalc()"><option value="1.0">18-45å² 1.0</option><option value="2.8"><1å² 2.8</option><option value="1.6">>76å² 1.6</option></select></label>
+	<label>ç¾çä¸¥éç¨åº¦ <select id="dip-sev" onchange="dipCalc()" disabled><option value="1.0">æªå¯ç¨</option></select></label>
+	<label>è¿ç¤ä¸¥éç¨åº¦ <select id="dip-tumor" onchange="dipCalc()" disabled><option value="1.0">æªå¯ç¨</option></select></label>
+	<label>æ¬¡è¦è¯æ­çç§ <select id="dip-subdx" onchange="dipCalc()" disabled><option value="1.0">æªå¯ç¨</option></select></label>
+	</div>
+	<div style="font-size:.68em;color:var(--text-dim);margin-top:6px">CCIåå¹´é¾å·²æ¥å¥å½æ MCC/CCèªå¨æ£æµï¼ç¾çä¸¥éç¨åº¦ãè¿ç¤ååãæ¬¡è¦è¯æ­çç§éå°æ¹å»ä¿å±å¬å¸è¾å©ç®å½åå¯ç¨</div>
+	</div>
+
+	<!-- è¿è§è¡ä¸ºè¾å©ç®å½ -->
+	<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+	<div style="font-weight:600;font-size:.82em;margin-bottom:8px;color:var(--danger)">è¿è§è¡ä¸ºè¾å©ç®å½ï¼è´åæ ¡æ­£ â ä¸åçè¯çæ£åæ¯ä»ï¼<span style="font-size:.75em;color:var(--text-dim);font-weight:400"> ææªå¯ç¨</span></div>
+	<div class="dip-params" style="margin-bottom:0">
+	<label>äºæ¬¡å¥é¢(7å¤©å) <select disabled><option>æ </option></select></label>
+	<label>ä½æ å¥é¢ <select disabled><option>æ </option></select></label>
+	<label>è¶é¿ä½é¢ <select disabled><option>æ </option></select></label>
+	<label>æ­»äº¡é£é© <select disabled><option>æ </option></select></label>
+	<label>çæ¡è´¨é <select disabled><option>æ­£å¸¸</option></select></label>
+	</div>
+	<div style="font-size:.68em;color:var(--text-dim);margin-top:6px">è¿è§è¡ä¸ºè¾å©ç®å½å¨å¹´åº¦æ¸ç®æ¶ç±å»ä¿å±æ ¹æ®çæ¡é¦é¡µæ°æ®åå»ä¿ç»ç®æ¸åè¿è¡å®¡æ ¸æ£åï¼æ­¤å¤ä»ä½æ¡æ¶é¢ç</div>
+	</div>
+
+	</div>
+	</details>
+
+		<div style="text-align:center;margin-bottom:12px"><button class="btn-drg" onclick="dipCalc()">æ¥è¯¢ DIP å¥ç»</button></div>
+		<div id="dip-rr"><div class="emp"><p>æ·»å è¯æ­ç¼ç ï¼æ¥è¯¢ DIP çç§åç»ä¸é¢ä¼°æ¯ä»</p></div></div>
+<!-- çç§åºæç´¢ï¼çä»½èªéåºï¼ -->
+		<div class="dip-search-sep" id="dip-sep" style="display:block">æç´æ¥æç´¢çç§åº</div>
+		<div id="dip-prov-tabs" style="display:none;margin-bottom:6px;gap:4px">
+		<button class="dip-ptab active" onclick="_dipProvTab('core')">æ ¸å¿çç§</button>
+		<button class="dip-ptab" onclick="_dipProvTab('comp')">ç»¼åçç§</button>
+		<button class="dip-ptab" onclick="_dipProvTab('tcm')">ä¸­å»ä¼å¿çç§</button>
+			<button class="dip-ptab" onclick="_dipProvTab('fixed')" style="display:none">å®é¢çç§</button>
+		</div>
+		<div class="sr"><input id="qd" placeholder="æç´¢ DIP ç¼ç /è¯æ­/ææ¯..." oninput="sd()"></div>
+		<div class="info" id="id"></div>
+		<div class="tbl-wrap"><table><thead id="dip-th"><tr><th style="width:65px">DIPç¼ç </th><th style="width:180px">ä¸»è¦è¯æ­</th><th style="width:160px">ä¸»ææ¯æä½</th><th style="width:90px">ç¸å³ææ¯</th><th style="width:55px">åå¼</th></tr></thead><tbody id="bd"></tbody></table></div>
+		</div>
+
+
+
+	<!-- ç¼ç è½¬æ¢ -->
+	<div id="t-convert" class="tab">
+	<iframe src="index-convert.html" style="width:100%;height:calc(100vh - 120px);border:none;border-radius:8px"></iframe>
+	</div>
+
+</main>
+
+<script src="app.js?v=20260704d"></script>
+</body>
+</html>
+

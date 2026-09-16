@@ -1,0 +1,24 @@
+{
+  "id": "conv-1789127317259-dryfy3d4r",
+  "providerId": "pi",
+  "title": "问候对话",
+  "titleGenerationStatus": "success",
+  "createdAt": 1789127317263,
+  "lastActivityAt": 1789390828273,
+  "sessionId": "01a0904c-64a9-7d50-864a-b6598ca10056",
+  "selectedModel": "pi:echobird/agnes-2.5-flash",
+  "providerState": {
+    "sessionFile": "C:\\Users\\xuxiu\\.pi\\agent\\sessions\\--D--AI_libra-codex_Obsi--\\2026-09-11T11-48-40-745Z_01a0904c-64a9-7d50-864a-b6598ca10056.jsonl",
+    "sessionId": "01a0904c-64a9-7d50-864a-b6598ca10056"
+  },
+  "usage": {
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "contextTokens": 101937,
+    "contextWindow": 128000,
+    "contextWindowIsAuthoritative": true,
+    "inputTokens": 101937,
+    "model": "pi:echobird/agnes-2.5-flash",
+    "percentage": 80
+  }
+}

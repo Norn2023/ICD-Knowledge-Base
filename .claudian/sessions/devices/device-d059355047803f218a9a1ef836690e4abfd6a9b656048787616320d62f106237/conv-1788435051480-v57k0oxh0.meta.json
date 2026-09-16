@@ -1,0 +1,20 @@
+{
+  "id": "conv-1788435051480-v57k0oxh0",
+  "providerId": "claude",
+  "title": "用户打招呼",
+  "titleGenerationStatus": "success",
+  "createdAt": 1788435051486,
+  "lastActivityAt": 1788613332497,
+  "sessionId": null,
+  "selectedModel": "haiku",
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 491022,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "contextWindow": 200000,
+    "contextTokens": 491022,
+    "percentage": 100,
+    "contextWindowIsAuthoritative": true
+  }
+}

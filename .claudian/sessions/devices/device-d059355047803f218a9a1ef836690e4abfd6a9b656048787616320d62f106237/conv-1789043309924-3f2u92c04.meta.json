@@ -1,0 +1,23 @@
+{
+  "id": "conv-1789043309924-3f2u92c04",
+  "providerId": "claude",
+  "title": "CHS-DR G3.0分组界面改为左右布局",
+  "titleGenerationStatus": "success",
+  "createdAt": 1789043309930,
+  "lastActivityAt": 1789124131325,
+  "sessionId": "9d74bcef-6852-455c-aada-64678f03b16a",
+  "selectedModel": "haiku",
+  "providerState": {
+    "providerSessionId": "9d74bcef-6852-455c-aada-64678f03b16a"
+  },
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 4101,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 310784,
+    "contextWindow": 200000,
+    "contextTokens": 314885,
+    "percentage": 100,
+    "contextWindowIsAuthoritative": true
+  }
+}

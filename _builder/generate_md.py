@@ -13,6 +13,15 @@ DB_PATH = os.path.join(os.path.dirname(__file__), "icd_kb.db")
 VAULT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 
+def cleanup_directory(base_dir, keep_files=('_index.md',)):
+    """删除生成目录下所有 .md 文件，保留 keep_files 中的文件"""
+    if not os.path.isdir(base_dir):
+        return
+    for f in os.listdir(base_dir):
+        fpath = os.path.join(base_dir, f)
+        if os.path.isfile(fpath) and f.endswith('.md') and f not in keep_files:
+            os.unlink(fpath)
+
 def generate():
     sys.stdout.reconfigure(encoding='utf-8') if hasattr(sys.stdout, 'reconfigure') else None
 
@@ -21,6 +30,20 @@ def generate():
     cur = conn.cursor()
 
     total_files = 0
+
+    # ── 清理旧文件，防止重名残留 ──────────────────────
+    icd10_root = os.path.join(VAULT_ROOT, "ICD10-疾病诊断")
+    if os.path.isdir(icd10_root):
+        for ch_name in os.listdir(icd10_root):
+            ch_path = os.path.join(icd10_root, ch_name)
+            if os.path.isdir(ch_path) and ch_name != '_案例库':
+                cleanup_directory(ch_path, keep_files=('_index.md',))
+    icd9_root = os.path.join(VAULT_ROOT, "ICD9-手术操作")
+    if os.path.isdir(icd9_root):
+        for ch_name in os.listdir(icd9_root):
+            ch_path = os.path.join(icd9_root, ch_name)
+            if os.path.isdir(ch_path):
+                cleanup_directory(ch_path, keep_files=('_index.md',))
 
     # ── ICD-10 章节索引 ──────────────────────────────────
     cur.execute("SELECT * FROM icd10_chapters ORDER BY chapter_no")
@@ -270,6 +293,10 @@ created: 2026-06-18
         with open(os.path.join(cases_folder, f"{case['case_no']}.md"), "w", encoding="utf-8") as f:
             f.write(case_md)
         total_files += 1
+
+    # ── 清理 DRG/DIP 旧文件 ──────────────────────────────
+    cleanup_directory(os.path.join(VAULT_ROOT, "DRG-分组"), keep_files=('_index.md',))
+    cleanup_directory(os.path.join(VAULT_ROOT, "DIP-病种"), keep_files=('_index.md',))
 
     # ── DRG 分组索引 ────────────────────────────────────
     drg_folder = os.path.join(VAULT_ROOT, "DRG-分组")

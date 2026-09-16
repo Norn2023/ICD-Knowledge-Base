@@ -11,6 +11,18 @@ def pad_icd9(code):
     if m: return m.group(1).zfill(2) + '.' + m.group(2)
     return code
 
+def normalize_icd9(code):
+    """Normalize ICD-9 code: remove leading zeros from whole part, trailing zeros from decimal part.
+    This ensures adrg_procedure_map codes match icd9_codes format."""
+    code = str(code).strip()
+    m = re.match(r'^0*(\d+)\.(.+)$', code)
+    if m:
+        whole = m.group(1)
+        dec = m.group(2).rstrip('0')
+        if not dec: dec = '0'
+        return f"{whole}.{dec}"
+    return code.lstrip('0') or '0'
+
 def compress(path):
     """gzip a file in-place (alongside original)"""
     gz_path = path + ".gz"
@@ -196,18 +208,27 @@ def export():
     # dx → adrg
     dx2a = {}
     cur.execute("SELECT icd10_code, adrg_id FROM adrg_diagnosis_map")
+    adrg_like_dx = 0
     for row in cur.fetchall():
-        if row[0] and row[0] != 'nan':
+        raw_code = str(row[0]).strip() if row[0] else ''
+        if raw_code and raw_code != 'nan':
+            # Warn about ADRG-like codes in diagnosis map
+            if re.match(r'^[A-Z]{2,3}\d', raw_code):
+                adrg_like_dx += 1
             adrg = adrg_info.get(row[1])
-            if adrg: dx2a.setdefault(row[0], []).append({"a": adrg["c"], "an": adrg["n"], "d": drg_info.get(row[1], [])})
+            if adrg: dx2a.setdefault(raw_code, []).append({"a": adrg["c"], "an": adrg["n"], "d": drg_info.get(row[1], [])})
+    if adrg_like_dx > 0:
+        print(f"⚠️  诊断映射表中发现 {adrg_like_dx} 个疑似ADRG编码条目（非ICD-10编码），建议清理数据库")
 
-    # px → adrg
+    # px → adrg (normalize codes to match icd9_codes format)
     px2a = {}
     cur.execute("SELECT icd9_code, adrg_id FROM adrg_procedure_map")
     for row in cur.fetchall():
-        if row[0] and row[0] != 'nan':
+        raw_code = str(row[0]).strip() if row[0] else ''
+        if raw_code and raw_code != 'nan':
+            norm_code = normalize_icd9(raw_code)
             adrg = adrg_info.get(row[1])
-            if adrg: px2a.setdefault(row[0], []).append({"a": adrg["c"], "an": adrg["n"], "d": drg_info.get(row[1], [])})
+            if adrg: px2a.setdefault(norm_code, []).append({"a": adrg["c"], "an": adrg["n"], "d": drg_info.get(row[1], [])})
 
     # MCC/CC lists with exclusion table reference
     mcc_set = set()

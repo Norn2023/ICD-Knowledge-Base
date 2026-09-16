@@ -1,0 +1,68 @@
+{
+  "search": {
+    "collapseAll": false,
+    "extraContext": true,
+    "showTitle": true,
+    "showPath": true,
+    "showTags": true,
+    "showLinks": true,
+    "showContent": true,
+    "contentLength": 200,
+    "maxResults": 100
+  },
+  "corePlugins": [
+    "file-explorer",
+    "global-search",
+    "switcher",
+    "graph",
+    "backlink",
+    "outgoing-link",
+    "tag-pane",
+    "page-preview",
+    "starred",
+    "command-palette",
+    "markdown-importer",
+    "outline",
+    "word-count",
+    "file-recovery"
+  ],
+  "communityPlugins": [
+    "dataview",
+    "templater-obsidian",
+    "calendar",
+    "obsidian-kanban",
+    "obsidian-mind-map",
+    "obsidian-excalidraw-plugin",
+    "obsidian-git",
+    "obsidian-linter",
+    "obsidian-typings",
+    "obsidian-checklist-plugin"
+  ],
+  "themes": [
+    "obsidian",
+    "minimal",
+    "California Coast",
+    "Things",
+    "Primary"
+  ],
+  "hotkeys": {
+    "global-search": [
+      {
+        "modifiers": ["Ctrl", "Shift"],
+        "key": "F"
+      }
+    ],
+    "switcher": [
+      {
+        "modifiers": ["Ctrl"],
+        "key": "O"
+      }
+    ],
+    "graph": [
+      {
+        "modifiers": ["Ctrl"],
+        "key": "G"
+      }
+    ]
+  }
+}

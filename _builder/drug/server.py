@@ -1,6 +1,6 @@
 """Drug Directory HTTP Server - serves JSON, PDFs, and page text extraction"""
 from http.server import HTTPServer, SimpleHTTPRequestHandler
-import os, json, urllib.parse, re, time
+import os, json, urllib.parse, re, time, socket
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -411,4 +411,10 @@ class Handler(SimpleHTTPRequestHandler):
 
 port = 8766
 print(f'药品目录 http://localhost:{port}')
-HTTPServer(('', port), Handler).serve_forever()
+while True:
+    try:
+        HTTPServer(('', port), Handler).serve_forever()
+    except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError, OSError):
+        continue
+    except KeyboardInterrupt:
+        break

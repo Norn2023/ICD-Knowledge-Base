@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "conversationId": "conv-1789125895905-qfjbnfsz5",
+  "records": [
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789125896125-2o2l8pc",
+      "userTurnOrdinal": 1,
+      "state": "accepted",
+      "localMessageId": "msg-1789125895897-3q28cl7",
+      "timestamp": 1789125895897,
+      "rawDisplayText": "http://localhost:8765/index.html，这个浏览器的DRG页面和DIP页面都发生了变化，这个不对，恢复到原来的样子",
+      "canonicalText": "http://localhost:8765/index.html，这个浏览器的DRG页面和DIP页面都发生了变化，这个不对，恢复到原来的样子",
+      "images": [],
+      "contentDigest": "20bc875536f9bcbcf5a7afa1b6bb3feba7bb35bcef559d53efbbf84c2d2977fc",
+      "providerUserMessageId": "9005ccaa-34fa-4978-a685-8212753e5a39"
+    }
+  ]
+}
