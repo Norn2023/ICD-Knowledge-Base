@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>医疗服务价格映射系统</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: #f0f2f5;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: white;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.header h1 { font-size: 1.5em; font-weight: 600; }
+.header .subtitle { font-size: 0.9em; opacity: 0.8; margin-top: 4px; }
+
+/* Province Selector */
+.province-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.1);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+.province-selector label {
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+.province-selector select {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95em;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+/* Stats */
+.stats-bar {
+  display: flex;
+  gap: 20px;
+  font-size: 0.85em;
+}
+.stat-item {
+  background: rgba(255,255,255,0.12);
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+.stat-item strong {
+  color: #ffd700;
+  margin-left: 4px;
+}
+
+/* Content */
+.content {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Search Box */
+.search-box {
+  background: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.search-box input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95em;
+  outline: none;
+}
+.search-box input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+/* Table */
+.data-table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.table-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.table-header h2 {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+.table-count {
+  font-size: 0.85em;
+  color: #6b7280;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #f1f5f9;
+}
+th {
+  background: #f8fafc;
+  font-weight: 600;
+  color: #475569;
+  position: sticky;
+  top: 0;
+}
+tr:hover { background: #f8fafc; }
+tr.clickable { cursor: pointer; }
+tr.clickable:hover { background: #eff6ff; }
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 500;
+  font-family: monospace;
+}
+.badge-sh { background: #dbeafe; color: #1d4ed8; }
+.badge-price { background: #dcfce7; color: #166534; }
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #94a3b8;
+  font-size: 0.95em;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+}
+.pagination button {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+.pagination button:hover { background: #f8fafc; }
+.pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>医疗服务价格映射系统</h1>
+    <div class="subtitle">旧医疗服务价格 ↔ 立项指南 ↔ 技术规范 ↔ ICD-9-CM3</div>
+  </div>
+  <div class="province-selector">
+    <label>选择省份：</label>
+    <select id="province-select" onchange="changeProvince(this.value)">
+      <option value="shanghai">上海市</option>
+      <option value="beijing">北京市</option>
+      <option value="guangdong">广东省</option>
+      <option value="jiangsu">江苏省</option>
+      <option value="zhejiang">浙江省</option>
+    </select>
+  </div>
+  <div class="stats-bar">
+    <span class="stat-item">当前省份: <strong id="stat-province">上海</strong></span>
+    <span class="stat-item">项目总数: <strong id="stat-total">0</strong></span>
+  </div>
+</div>
+
+<div class="content">
+  <div class="search-box">
+    <input type="text" id="search-input" placeholder="搜索项目名称、编码..." oninput="searchItems(this.value)">
+  </div>
+
+  <div class="data-table">
+    <div class="table-header">
+      <h2 id="table-title">📋 上海市医疗服务价格项目</h2>
+      <span class="table-count" id="table-count">加载中...</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>项目编码</th>
+          <th>项目名称</th>
+          <th>项目内涵</th>
+          <th>计价单位</th>
+          <th>价格</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr><td colspan="5" class="loading">加载中...</td></tr>
+      </tbody>
+    </table>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</div>
+
+<script>
+var CURRENT_PROVINCE = 'shanghai';
+var currentPage = 1;
+var pageSize = 20;
+var allItems = [];
+
+// Load initial data
+loadItems(CURRENT_PROVINCE);
+
+function changeProvince(province) {
+  CURRENT_PROVINCE = province;
+  currentPage = 1;
+  var provinceNames = {
+    'shanghai': '上海市',
+    'beijing': '北京市',
+    'guangdong': '广东省',
+    'jiangsu': '江苏省',
+    'zhejiang': '浙江省'
+  };
+  document.getElementById('stat-province').textContent = provinceNames[province] || province;
+  document.getElementById('table-title').textContent = '📋 ' + provinceNames[province] + '医疗服务价格项目';
+  loadItems(province);
+}
+
+function loadItems(province, page) {
+  page = page || 1;
+  var offset = (page - 1) * pageSize;
+
+  fetch('/api/items?province=' + province + '&limit=' + pageSize + '&offset=' + offset)
+    .then(r => r.json())
+    .then(d => {
+      allItems = d.items || [];
+      document.getElementById('stat-total').textContent = d.total || 0;
+      document.getElementById('table-count').textContent = '共 ' + (d.total || 0) + ' 条';
+      renderTable(allItems, d.total);
+      renderPagination(page, Math.ceil((d.total || 0) / pageSize));
+    })
+    .catch(e => {
+      document.getElementById('table-body').innerHTML = '<tr><td colspan="5" class="empty-state">加载失败: ' + e.message + '</td></tr>';
+    });
+}
+
+function renderTable(items, total) {
+  var tbody = document.getElementById('table-body');
+  if (!items || !items.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">暂无数据</td></tr>';
+    return;
+  }
+
+  var html = '';
+  items.forEach(function(item) {
+    var code = item.code || item.sh_code || item.id || '';
+    var name = item.name || item.sh_name || item.project_name || '未命名';
+    var desc = (item.desc || item.sh_desc || item.project_desc || '').substring(0, 50);
+    var unit = item.unit || item.sh_unit || '次';
+    var price = item.price || item.sh_price || '-';
+
+    html += '<tr class="clickable" onclick="showMapping(\'' + item.id + '\', \'' + CURRENT_PROVINCE + '\')">' +
+      '<td><span class="badge badge-sh">' + code + '</span></td>' +
+      '<td>' + name + '</td>' +
+      '<td style="color:#6b7280;font-size:0.85em">' + desc + '...</td>' +
+      '<td>' + unit + '</td>' +
+      '<td><span class="badge badge-price">' + price + '</span></td>' +
+    '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+function renderPagination(current, total) {
+  var container = document.getElementById('pagination');
+  if (total <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+
+  var html = '';
+  html += '<button ' + (current <= 1 ? 'disabled' : '') + ' onclick="goPage(' + (current - 1) + ')">上一页</button>';
+  html += '<span style="padding:8px 16px;font-size:0.85em;color:#6b7280">第 ' + current + '/' + total + ' 页</span>';
+  html += '<button ' + (current >= total ? 'disabled' : '') + ' onclick="goPage(' + (current + 1) + ')">下一页</button>';
+  container.innerHTML = html;
+}
+
+function goPage(page) {
+  currentPage = page;
+  loadItems(CURRENT_PROVINCE, page);
+  window.scrollTo(0, 0);
+}
+
+function searchItems(query) {
+  if (!query.trim()) {
+    loadItems(CURRENT_PROVINCE, currentPage);
+    return;
+  }
+
+  fetch('/api/search?q=' + encodeURIComponent(query) + '&province=' + CURRENT_PROVINCE + '&limit=50')
+    .then(r => r.json())
+    .then(d => {
+      renderTable(d.results || [], d.total);
+      document.getElementById('pagination').innerHTML = '';
+    })
+    .catch(e => console.error('Search error:', e));
+}
+
+function showMapping(itemId, province) {
+  alert('映射功能开发中...\n\n项目ID: ' + itemId + '\n省份: ' + province);
+}
+</script>
+</body>
+</html>

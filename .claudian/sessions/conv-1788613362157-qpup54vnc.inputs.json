@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "conversationId": "conv-1788613362157-qpup54vnc",
+  "records": [
+    {
+      "schemaVersion": 1,
+      "id": "msg-1788613362758-uyl1rn8",
+      "userTurnOrdinal": 1,
+      "state": "accepted",
+      "localMessageId": "msg-1788613362148-r88jbjh",
+      "timestamp": 1788613362148,
+      "rawDisplayText": "你好",
+      "canonicalText": "你好",
+      "images": [],
+      "contentDigest": "815b1925f3db319cfc8ef8cad8a91b3f8b512f630d8f82635cb105e93e666c2a",
+      "providerUserMessageId": "4ca7e950-4dfd-47d2-a492-ca1da836d23f",
+      "providerAssistantMessageId": "422a77c2-7f57-403a-a65c-7b0c3f54ae91"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789020044158-n60xt9v",
+      "userTurnOrdinal": 2,
+      "state": "accepted",
+      "localMessageId": "msg-1789020044127-i7k676y",
+      "timestamp": 1789020044127,
+      "rawDisplayText": "你好",
+      "canonicalText": "你好",
+      "images": [],
+      "contentDigest": "815b1925f3db319cfc8ef8cad8a91b3f8b512f630d8f82635cb105e93e666c2a",
+      "providerUserMessageId": "f0131d0a-3433-4ed8-9887-eb74932a5215",
+      "providerAssistantMessageId": "5dfed8ba-504b-4139-a966-e255c38f7cc6"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789020092742-sxiyx1l",
+      "userTurnOrdinal": 3,
+      "state": "accepted",
+      "localMessageId": "msg-1789020092736-rxu8ypy",
+      "timestamp": 1789020092736,
+      "rawDisplayText": "你好，http://localhost:8765/index.html，这个端口打不开",
+      "canonicalText": "你好，http://localhost:8765/index.html，这个端口打不开",
+      "images": [],
+      "contentDigest": "7c8ee1c3706b80554345b886bbb3fc037dcea904668322c398bdc42775ef6a81",
+      "providerUserMessageId": "efcba95a-d4d8-455c-8840-689d98c8d56a",
+      "providerAssistantMessageId": "0d5aaefe-bba7-4380-896d-34cd6ec146ef"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789020234802-pkadjya",
+      "userTurnOrdinal": 4,
+      "state": "accepted",
+      "localMessageId": "msg-1789020234795-1vt6hh2",
+      "timestamp": 1789020234795,
+      "rawDisplayText": "但是点击ICD-10和ICD-9的页面没有内容，帮我修复一下",
+      "canonicalText": "但是点击ICD-10和ICD-9的页面没有内容，帮我修复一下",
+      "images": [],
+      "contentDigest": "dc876a0f6db4cb5c54e72ac8989ea11dade20e1848151159b8e65dc7a126bf64",
+      "providerUserMessageId": "6454fbe9-c172-4d54-adc1-12af88fd6a02"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789021919408-f1sfsng",
+      "userTurnOrdinal": 5,
+      "state": "accepted",
+      "localMessageId": "msg-1789021919392-p8qab81",
+      "timestamp": 1789021919392,
+      "rawDisplayText": "DRG页面分成两栏，左侧为全国CHS-DRG2.0和山西临汾CHS-DRG；右侧为全国CHS-DR G3.0 分组界面相同",
+      "canonicalText": "DRG页面分成两栏，左侧为全国CHS-DRG2.0和山西临汾CHS-DRG；右侧为全国CHS-DR G3.0 分组界面相同",
+      "images": [],
+      "contentDigest": "bab68f64447a46843c7a2ff03bf0a11eecd3386d0d28c6102654c57211fcc011",
+      "providerUserMessageId": "cbfbcd00-f5d3-46a5-8a8b-a2e7ebd83369",
+      "providerAssistantMessageId": "c6eb8764-f5f0-4b5a-8e4d-3f76dcaf66d6"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789024457437-8uykgyd",
+      "userTurnOrdinal": 6,
+      "state": "accepted",
+      "localMessageId": "msg-1789024457426-a3rsbcz",
+      "timestamp": 1789024457426,
+      "rawDisplayText": "你好",
+      "canonicalText": "你好",
+      "images": [],
+      "contentDigest": "815b1925f3db319cfc8ef8cad8a91b3f8b512f630d8f82635cb105e93e666c2a",
+      "providerUserMessageId": "4bc7542a-02b0-4993-a62d-b0049f04daab"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789029051438-zjrzcc7",
+      "userTurnOrdinal": 7,
+      "state": "accepted",
+      "localMessageId": "msg-1789029051408-3e9zi9n",
+      "timestamp": 1789029051408,
+      "rawDisplayText": "你好",
+      "canonicalText": "你好",
+      "images": [],
+      "contentDigest": "815b1925f3db319cfc8ef8cad8a91b3f8b512f630d8f82635cb105e93e666c2a",
+      "providerUserMessageId": "471989bd-de5b-466e-9401-9e36d0323e69"
+    }
+  ]
+}

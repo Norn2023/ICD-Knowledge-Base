@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>病案首页 → 医保结算清单 编码转换工具</title>
+<style>
+:root{--bg:#f8f9fb;--bg2:#ffffff;--bg3:#f1f3f7;--text:#1a1d28;--text2:#8b919e;--accent:#4f8cf7;--accent2:#3ba06a;--success:#3ba06a;--warning:#e8963a;--danger:#e85555;--border:#e8ebf0;--r:8px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+header{background:var(--bg2);padding:16px 24px;border-bottom:2px solid var(--accent);text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+header h1{font-size:1.3em;color:var(--accent);font-weight:700}header p{font-size:.78em;color:var(--text2);margin-top:4px}
+main{max-width:1400px;margin:0 auto;padding:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--bg2);border-radius:var(--r);padding:16px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card h2{font-size:1em;margin-bottom:12px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:8px}
+.card h3{font-size:.85em;margin:12px 0 8px;color:#1a1d28}
+label{display:block;font-size:.82em;color:var(--text2);margin-bottom:4px;margin-top:10px}
+input,textarea,select{width:100%;padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-size:.85em;font-family:monospace}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(79,140,247,.15)}
+textarea{resize:vertical;min-height:60px}
+.btn{display:inline-block;padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:var(--r);cursor:pointer;font-size:.85em;font-weight:600;margin-top:12px}
+.btn:hover{opacity:.9;background:#3a6fd8}.btn2{background:var(--success)}.btn3{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.patient-info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.dx-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px}
+.dx-row input{flex:1}.dx-row .code-inp{flex:0 0 140px}
+.dx-row button{flex:0 0 28px;height:28px;background:var(--danger);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:.8em;align-self:center;margin-top:5px}
+.time-row{display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+.time-row select{width:auto;min-width:80px;flex:0 0 auto}
+.time-row input[type=text]{flex:1;min-width:160px}
+.time-row .time-label{font-size:.78em;color:var(--text2);white-space:nowrap}
+.time-row button{margin-top:0}
+#result{display:none}
+.rx-row{display:flex;gap:10px;align-items:flex-end;margin-bottom:8px}
+.rx-col{flex:1;display:flex;flex-direction:column}
+.rx-col input{background:#f8f9fb;border:1px solid var(--border);border-radius:var(--r);padding:8px 10px;font-size:.85em;color:var(--text)}
+.rx-col input[readonly]{background:#f0fdf4;border-color:#86efac;color:#166534;font-weight:600}
+.rx-col label{font-size:.72em;color:var(--text2);margin-bottom:2px}
+.rx-status{flex:0 0 80px;display:flex;align-items:flex-end;padding-bottom:8px}
+.result-section{margin-bottom:16px}
+.result-section h3{margin:0 0 8px;font-size:.9em}
+.warning-box{background:#fef0f0;border:1px solid var(--danger);border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:.82em}
+.warning-box b{color:var(--danger)}.warning-item{margin:4px 0;padding-left:12px;border-left:3px solid var(--warning)}
+.info-box{background:#eef8f3;border:1px solid var(--success);border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:.82em}
+.rule-box{background:#e8f1fe;border:1px solid var(--accent);border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:.82em}
+.tag{display:inline-block;padding:2px 8px;border-radius:12px;font-size:.72em;font-weight:600;margin:2px}
+.tag-warn{background:#fef7ef;color:var(--warning)}.tag-ok{background:#eef8f3;color:var(--success)}.tag-err{background:#fef0f0;color:var(--danger)}.tag-info{background:#e8f1fe;color:var(--accent)}
+.loading{text-align:center;padding:40px;color:var(--text2)}
+.spinner{border:3px solid var(--border);border-top:3px solid var(--accent);border-radius:50%;width:30px;height:30px;animation:spin 1s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.code-sug div:hover{background:var(--bg3)}.code-sug div:last-child{border-bottom:none}
+footer{text-align:center;padding:16px;color:var(--text2);font-size:.72em}
+</style>
+</head>
+<body>
+<header>
+  <h1>🏥 病案首页 → 医保结算清单 · 编码转换工具</h1>
+  <p>基于《医疗保障基金结算清单填写规范》+ ICD-10/ICD-9-CM3 国临版↔医保版对照</p>
+</header>
+<main>
+<div class="grid">
+<!-- LEFT: Input -->
+<div class="card">
+  <h2>📋 病案首页信息录入</h2>
+
+  <!-- Row 1: Patient basics -->
+  <div class="patient-info">
+    <div><label>性别</label><select id="gender" onchange="_scheduleConvert()"><option value="M">男</option><option value="F">女</option></select></div>
+    <div><label>出生日期</label><input id="birthDate" type="text" placeholder="如 1960-06-15" onchange="_calcAge();_scheduleConvert()"></div>
+    <div><label>年龄 <span id="ageDisplay" style="font-weight:600;color:var(--accent)">—</span></label><input type="hidden" id="ageDays" value=""></div>
+  </div>
+
+  <!-- Row 2: Admission/discharge dates -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+    <div><label>入院日期（具体到分钟）</label><input id="admDate" type="text" placeholder="如 2025-06-15T14:30" onchange="_calcStay();_scheduleConvert()"></div>
+    <div><label>出院日期（具体到分钟）</label><input id="disDate" type="text" placeholder="如 2025-06-15T14:30" onchange="_calcStay();_scheduleConvert()"></div>
+  </div>
+  <div style="font-size:.78em;color:var(--text2);margin:4px 0">住院天数（计入不计出）：<b id="stayDays" style="color:var(--accent)">—</b></div>
+
+  <!-- Row 3: Admission type + discharge type + newborn weight -->
+  <div class="patient-info" style="margin-top:8px">
+    <div><label>入院途径</label><select id="admType" onchange="_scheduleConvert()"><option value="1">1-急诊</option><option value="2">2-门诊</option><option value="3">3-转诊</option><option value="4">4-其他医疗机构转入</option><option value="9">9-其他</option></select></div>
+    <div><label>离院方式</label><select id="disType" onchange="_scheduleConvert()"><option value="1">1-医嘱离院</option><option value="2">2-医嘱转院</option><option value="3">3-医嘱转社区</option><option value="4">4-非医嘱离院</option><option value="5">5-死亡</option><option value="9">9-其他</option></select></div>
+    <div><label>新生儿入院体重</label><select id="nbwSelect" onchange="_nbwToggle();_scheduleConvert()"><option value="">无</option><option value="custom">手工填写</option><option value="<750"><750g</option><option value="750-999">750-999g</option><option value="1000-1499">1000-1499g</option><option value="1500-1999">1500-1999g</option><option value="2000-2499">2000-2499g</option><option value=">=2500">≥2500g</option></select><input id="nbwCustom" type="number" placeholder="手工填写体重(g)" style="display:none;margin-top:4px" min="0" max="10000" oninput="_scheduleConvert()"></div>
+  </div>
+
+  <h3>🔴 主要诊断</h3>
+  <div class="dx-row">
+    <input class="code-inp" id="mainDxCode" placeholder="编码，如 I20.801" oninput="_lookupDx('mainDxCode','mainDxName','mainDxMap');_scheduleConvert()">
+    <input id="mainDxName" placeholder="诊断名称（可输入关键字搜索）" style="flex:1" oninput="_lookupDxName('mainDxName','mainDxCode','mainDxMap');_scheduleConvert()">
+    <input type="hidden" id="mainDxMap" value="">
+  </div>
+
+  <h3>🟡 其他诊断 <span style="font-size:.72em;color:var(--text2)">（可添加多条）</span></h3>
+  <div id="otherDxList">
+    <div class="dx-row">
+      <input class="code-inp" placeholder="编码" oninput="_lookupDx(this,'dxName'+this.dataset.idx,'dxMap'+this.dataset.idx);_scheduleConvert()" data-idx="0" id="dxCode0">
+      <input id="dxName0" placeholder="诊断名称（可输入关键字搜索）" style="flex:1" oninput="_lookupDxName(this,'dxCode'+this.dataset.idx,'dxMap'+this.dataset.idx);_scheduleConvert()" data-idx="0" data-code-id="dxCode0">
+      <input type="hidden" id="dxMap0">
+      <button onclick="_removeDx(this)" style="visibility:hidden">✕</button>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn3" onclick="_addDx()">+ 添加其他诊断</button></div>
+
+  <h3>🔵 主要手术操作</h3>
+  <div class="dx-row">
+    <input class="code-inp" id="mainProcCode" placeholder="编码，如 36.0700" oninput="_lookupProc('mainProcCode','mainProcName','mainProcMap');_scheduleConvert()">
+    <input id="mainProcName" placeholder="手术名称（可输入关键字搜索）" style="flex:1" oninput="_lookupProcName('mainProcName','mainProcCode','mainProcMap');_scheduleConvert()">
+    <input type="hidden" id="mainProcMap" value="">
+  </div>
+
+  <h3>🟢 其他手术操作</h3>
+  <div id="otherProcList">
+    <div class="dx-row">
+      <input class="code-inp" placeholder="编码" oninput="_lookupProc(this,'procName'+this.dataset.idx,'procMap'+this.dataset.idx);_scheduleConvert()" data-idx="0" id="procCode0">
+      <input id="procName0" placeholder="手术名称（可输入关键字搜索）" style="flex:1" oninput="_lookupProcName(this,'procCode'+this.dataset.idx,'procMap'+this.dataset.idx);_scheduleConvert()" data-idx="0" data-code-id="procCode0">
+      <input type="hidden" id="procMap0">
+      <button onclick="_removeProc(this)" style="visibility:hidden">✕</button>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn3" onclick="_addProc()">+ 添加其他手术</button></div>
+
+  <!-- Ventilator -->
+  <h3>🫁 呼吸机使用 <span style="font-size:.72em;color:var(--text2)">（可添加多条）</span></h3>
+  <div id="ventList"></div>
+  <div class="btn-row"><button class="btn3" onclick="_addVent()">+ 添加呼吸机记录</button></div>
+  <div style="font-size:.78em;color:var(--text2)">总使用时间：<b id="ventTotal" style="color:var(--accent)">—</b></div>
+
+  <!-- ECMO -->
+  <h3>💓 体外膜肺氧合（ECMO）<span style="font-size:.72em;color:var(--text2)">（可添加多条）</span></h3>
+  <div id="ecmoList"></div>
+  <div class="btn-row"><button class="btn3" onclick="_addEcmo()">+ 添加ECMO记录</button></div>
+  <div style="font-size:.78em;color:var(--text2)">ECMO总时间：<b id="ecmoTotal" style="color:var(--accent)">—</b></div>
+
+  <!-- CRRT -->
+  <h3>🩸 连续肾脏替代疗法（CRRT）<span style="font-size:.72em;color:var(--text2)">（可添加多条）</span></h3>
+  <div id="crrtList"></div>
+  <div class="btn-row"><button class="btn3" onclick="_addCrrt()">+ 添加CRRT记录</button></div>
+  <div style="font-size:.78em;color:var(--text2)">CRRT总时间：<b id="crrtTotal" style="color:var(--accent)">—</b></div>
+
+  <div style="margin-top:16px">
+    <button class="btn" onclick="_convert()">🔄 执行转换</button>
+    <button class="btn btn3" onclick="_clear()">清空</button>
+    <span id="autoStatus" style="font-size:.75em;color:var(--accent);margin-left:12px;display:none">⚡ 实时转换中...</span>
+  </div>
+</div>
+
+<!-- RIGHT: Result -->
+<div class="card">
+  <h2>📊 医保结算清单</h2>
+  <div id="result">
+    <div id="warnings"></div>
+    <div id="rulesApplied"></div>
+
+    <!-- Main Diagnosis -->
+    <div class="result-section">
+      <h3 style="color:#dc2626">🔴 主要诊断</h3>
+      <div class="rx-row">
+        <div class="rx-col"><label>编码</label><input id="rx_mainDxCode" readonly style="background:#f0fdf4;border-color:#86efac"></div>
+        <div class="rx-col"><label>名称</label><input id="rx_mainDxName" readonly style="background:#f0fdf4;border-color:#86efac"></div>
+        <div class="rx-col rx-status"><span id="rx_mainDxStatus"></span></div>
+      </div>
+    </div>
+
+    <!-- Other Diagnoses -->
+    <div class="result-section">
+      <h3 style="color:#d97706">🟡 其他诊断</h3>
+      <div id="rx_otherDxList"></div>
+      <div id="rx_otherDxSummary" style="font-size:.78em;color:var(--text2);margin-top:6px"></div>
+    </div>
+
+    <!-- Main Procedure -->
+    <div class="result-section">
+      <h3 style="color:#2563eb">🔵 主要手术操作</h3>
+      <div class="rx-row">
+        <div class="rx-col"><label>编码</label><input id="rx_mainProcCode" readonly style="background:#f0fdf4;border-color:#86efac"></div>
+        <div class="rx-col"><label>名称</label><input id="rx_mainProcName" readonly style="background:#f0fdf4;border-color:#86efac"></div>
+        <div class="rx-col rx-status"><span id="rx_mainProcStatus"></span></div>
+      </div>
+    </div>
+
+    <!-- Other Procedures -->
+    <div class="result-section">
+      <h3 style="color:#059669">🟢 其他手术操作</h3>
+      <div id="rx_otherProcList"></div>
+      <div id="rx_otherProcSummary" style="font-size:.78em;color:var(--text2);margin-top:6px"></div>
+    </div>
+
+    <!-- Summary -->
+    <div class="result-section" id="rx_specialSection" style="display:none">
+      <h3 style="color:#7c3aed">📋 住院信息汇总</h3>
+      <div id="rx_specialList"></div>
+    </div>
+  </div>
+  <div id="emptyState" style="text-align:center;padding:60px 20px;color:var(--text2)">
+    <div style="font-size:3em;margin-bottom:12px">🏥</div>
+    <p>录入左侧病案首页信息后<br>点击 <b style="color:var(--accent)">"执行转换"</b> 查看结果</p>
+  </div>
+</div>
+</div>
+</main>
+<footer>ICD编码映射数据来源：国家医保局官网 · ICD-10医保版2.0 / ICD-9-CM3医保版2.0</footer>
+<script>
+// Global error capture
+var _jsErrors=[];
+window.onerror=function(msg,url,line,col,err){
+    _jsErrors.push({msg:msg,url:url,line:line,col:col,stack:err?err.stack:''});
+    var w=document.getElementById('warnings');
+    if(w){
+        w.innerHTML='<div class="warning-box"><b>JS Error</b><br>'+msg+'<br><small>'+url+' line '+line+':'+col+'</small><br><pre style="font-size:.7em;max-height:200px;overflow:auto">'+(err?err.stack:'')+'</pre></div>';
+        document.getElementById('result').style.display='block';
+        document.getElementById('emptyState').style.display='none';
+    }
+    return false;
+};
+</script>
+<script src="app.js?v=20260702c"></script>
+</body>
+</html>

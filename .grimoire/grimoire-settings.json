@@ -1,0 +1,189 @@
+{
+  "userName": "",
+  "permissionMode": "normal",
+  "model": "gpt-5.5",
+  "thinkingBudget": "off",
+  "effortLevel": "high",
+  "serviceTier": "default",
+  "enableAutoTitleGeneration": true,
+  "titleGenerationModel": "",
+  "excludedTags": [],
+  "mediaFolder": "",
+  "systemPrompt": "",
+  "persistentExternalContextPaths": [],
+  "contextEngine": {
+    "vaultSearchEnabled": true,
+    "vaultSearchMaxResults": 8,
+    "vaultSearchMaxSnippetChars": 700,
+    "relevantNotesEnabled": true,
+    "relevantNotesMaxResults": 6,
+    "projectWorkspaces": [],
+    "activeProjectWorkspaceId": ""
+  },
+  "sharedEnvironmentVariables": "",
+  "envSnippets": [],
+  "customContextLimits": {},
+  "customModelAliases": {},
+  "keyboardNavigation": {
+    "scrollUpKey": "w",
+    "scrollDownKey": "s",
+    "focusInputKey": "i"
+  },
+  "requireCommandOrControlEnterToSend": false,
+  "advancedSectionsOpen": {},
+  "usageIndicatorsEnabled": true,
+  "debugLoggingEnabled": false,
+  "locale": "zh-CN",
+  "providerConfigs": {
+    "antigravity": {
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "customModels": "",
+      "enabled": false,
+      "environmentHash": "",
+      "environmentVariables": "",
+      "modelAliases": {},
+      "visibleModels": []
+    },
+    "claude": {
+      "enabled": false,
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "loadUserSettings": true,
+      "enableChrome": false,
+      "enableBangBash": false,
+      "enableOpus1M": false,
+      "enableSonnet1M": false,
+      "customModels": "",
+      "lastModel": "haiku",
+      "environmentVariables": "",
+      "environmentHash": "ANTHROPIC_BASE_URL=https://api.stepfun.com|ANTHROPIC_DEFAULT_HAIKU_MODEL=step-3.5-flash-2603|ANTHROPIC_DEFAULT_OPUS_MODEL=step-3.5-flash-2603|ANTHROPIC_DEFAULT_SONNET_MODEL=step-3.5-flash-2603|ANTHROPIC_MODEL=step-3.5-flash-2603|project=ANTHROPIC_AUTH_TOKEN=fK64c6Q9xd8UP5Xfn1MzZSbnM6PUXxKjLOZZXkDvqiHZquuKmbmWfw2Lm69hSTqK|ANTHROPIC_BASE_URL=https://api.stepfun.com|ANTHROPIC_DEFAULT_HAIKU_MODEL=step-3.5-flash-2603|ANTHROPIC_DEFAULT_OPUS_MODEL=step-3.5-flash-2603|ANTHROPIC_DEFAULT_SONNET_MODEL=step-3.5-flash-2603|ANTHROPIC_MODEL=step-3.5-flash-2603|ANTHROPIC_SMALL_FAST_MODEL=step-3.5-flash-2603|API_TIMEOUT_MS=3000000|CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1",
+      "respectProjectSettings": true,
+      "discoveredModels": []
+    },
+    "codex": {
+      "enabled": true,
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "customModels": "",
+      "discoveredModels": [
+        {
+          "description": "Latest frontier agentic coding model.",
+          "id": "gpt-5.6-sol",
+          "isDefault": true,
+          "label": "GPT-5.6-Sol"
+        },
+        {
+          "description": "Balanced agentic coding model for everyday work.",
+          "id": "gpt-5.6-terra",
+          "label": "GPT-5.6-Terra"
+        },
+        {
+          "description": "Fast and affordable agentic coding model.",
+          "id": "gpt-5.6-luna",
+          "label": "GPT-5.6-Luna"
+        },
+        {
+          "description": "Frontier model for complex coding, research, and real-world work.",
+          "id": "gpt-5.5",
+          "label": "GPT-5.5"
+        },
+        {
+          "description": "Optimized for professional work and long-running agents.",
+          "id": "gpt-5.2",
+          "label": "GPT-5.2"
+        }
+      ],
+      "reasoningSummary": "detailed",
+      "environmentVariables": "",
+      "environmentHash": "",
+      "installationMethod": "native-windows",
+      "installationMethodsByHost": {},
+      "wslDistroOverride": "",
+      "wslDistroOverridesByHost": {}
+    },
+    "gemini": {
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "enabled": false,
+      "environmentHash": "",
+      "environmentVariables": "",
+      "modelAliases": {},
+      "selectedMode": "",
+      "visibleModels": []
+    },
+    "grok": {
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "enabled": false,
+      "environmentHash": "",
+      "environmentVariables": "",
+      "modelAliases": {},
+      "preferredThinkingByModel": {},
+      "selectedMode": "",
+      "thinkingOptionsByModel": {},
+      "visibleModels": []
+    },
+    "kimicode": {
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "enabled": false,
+      "environmentHash": "",
+      "environmentVariables": "KIMICODE_ENABLE_EXA=1",
+      "modelAliases": {},
+      "preferredThinkingByModel": {},
+      "selectedMode": "",
+      "thinkingOptionsByModel": {},
+      "visibleModels": []
+    },
+    "mimocode": {
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "enabled": false,
+      "environmentHash": "",
+      "environmentVariables": "MIMOCODE_ENABLE_EXA=1",
+      "modelAliases": {},
+      "preferredThinkingByModel": {},
+      "selectedMode": "",
+      "thinkingOptionsByModel": {},
+      "visibleModels": []
+    },
+    "opencode": {
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "enabled": false,
+      "environmentHash": "",
+      "environmentVariables": "OPENCODE_ENABLE_EXA=1",
+      "modelAliases": {},
+      "preferredThinkingByModel": {},
+      "selectedMode": "",
+      "thinkingOptionsByModel": {},
+      "visibleModels": []
+    }
+  },
+  "settingsProvider": "codex",
+  "savedProviderModel": {
+    "claude": "step-3.5-flash-2603",
+    "codex": "gpt-5.5"
+  },
+  "savedProviderEffort": {
+    "claude": "high",
+    "codex": "high"
+  },
+  "savedProviderServiceTier": {
+    "codex": "default"
+  },
+  "savedProviderThinkingBudget": {},
+  "savedProviderPermissionMode": {
+    "claude": "normal",
+    "codex": "normal"
+  },
+  "lastCustomModel": "step-3.5-flash-2603",
+  "lastSeenChangelogVersion": "1.0.35",
+  "maxTabs": 5,
+  "tabBarPosition": "header",
+  "enableAutoScroll": true,
+  "deferMathRenderingDuringStreaming": true,
+  "chatViewPlacement": "right-sidebar",
+  "hiddenProviderCommands": {}
+}

@@ -1,0 +1,10 @@
+{
+  "id": "conv-1789126675259-juieu8gxr",
+  "providerId": "pi",
+  "title": "你好",
+  "titleGenerationStatus": "failed",
+  "createdAt": 1789126675264,
+  "lastActivityAt": 1789126705658,
+  "sessionId": null,
+  "selectedModel": "pi:echobird/agnes-2.5-flash"
+}

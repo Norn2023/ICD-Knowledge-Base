@@ -1,0 +1,23 @@
+{
+  "id": "conv-1789126089304-xrhhzw9nk",
+  "providerId": "claude",
+  "title": "DRG和DIP页面均错误加载DRG3.0",
+  "titleGenerationStatus": "success",
+  "createdAt": 1789126089309,
+  "lastActivityAt": 1789126523166,
+  "sessionId": "3b8bea53-e8cc-4e0c-a35b-7df37ca8d9e4",
+  "selectedModel": "haiku",
+  "providerState": {
+    "providerSessionId": "3b8bea53-e8cc-4e0c-a35b-7df37ca8d9e4"
+  },
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 0,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "contextWindow": 200000,
+    "contextTokens": 0,
+    "percentage": 0,
+    "contextWindowIsAuthoritative": true
+  }
+}

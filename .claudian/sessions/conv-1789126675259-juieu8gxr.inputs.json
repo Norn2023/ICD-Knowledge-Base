@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "conversationId": "conv-1789126675259-juieu8gxr",
+  "records": [
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789126675622-lkd3i21",
+      "userTurnOrdinal": 1,
+      "state": "staged",
+      "localMessageId": "msg-1789126675249-o7272wu",
+      "timestamp": 1789126675249,
+      "rawDisplayText": "你好",
+      "canonicalText": "你好",
+      "images": [],
+      "contentDigest": "815b1925f3db319cfc8ef8cad8a91b3f8b512f630d8f82635cb105e93e666c2a"
+    }
+  ]
+}

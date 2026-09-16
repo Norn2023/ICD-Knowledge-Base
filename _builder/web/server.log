@@ -1,0 +1,20 @@
+http://localhost:8765
+[GET] / -> GET / HTTP/1.1
+[GET] / -> GET / HTTP/1.1
+[GET] /style.css -> GET /style.css HTTP/1.1
+[GET] /app.js?v=20260704d -> GET /app.js?v=20260704d HTTP/1.1
+[GET] /index-convert.html -> GET /index-convert.html HTTP/1.1
+[GET] /data.json -> GET /data.json HTTP/1.1
+[GET] /drg.json -> GET /drg.json HTTP/1.1
+[GET] /app-convert.js?v=20260704d -> GET /app-convert.js?v=20260704d HTTP/1.1
+[GET] /drg_meta.json -> GET /drg_meta.json HTTP/1.1
+[GET] /insurance_excluded.json -> GET /insurance_excluded.json HTTP/1.1
+[GET] /proc_classification.json -> GET /proc_classification.json HTTP/1.1
+[GET] /drg.json -> GET /drg.json HTTP/1.1
+[GET] /local_feedback.json -> GET /local_feedback.json HTTP/1.1
+[GET] /drug_audit_index.json -> GET /drug_audit_index.json HTTP/1.1
+[GET] /pricing_guide_tech.json -> GET /pricing_guide_tech.json HTTP/1.1
+[GET] /icd10_map.json -> GET /icd10_map.json HTTP/1.1
+[GET] /icd9_map.json -> GET /icd9_map.json HTTP/1.1
+[GET] /favicon.ico -> GET /favicon.ico HTTP/1.1
+[GET] / -> GET / HTTP/1.1

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "conversationId": "conv-1789032235507-335hd7vyy",
+  "records": [
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789032235692-op9z57f",
+      "userTurnOrdinal": 1,
+      "state": "accepted",
+      "localMessageId": "msg-1789032235500-z3rj0r2",
+      "timestamp": 1789032235500,
+      "rawDisplayText": "你好",
+      "canonicalText": "你好",
+      "images": [],
+      "contentDigest": "815b1925f3db319cfc8ef8cad8a91b3f8b512f630d8f82635cb105e93e666c2a",
+      "providerUserMessageId": "4e9d24ae-88cf-4eac-940a-4002e1037d6e",
+      "providerAssistantMessageId": "b071e9e3-f011-4558-8be3-e2c10ddc4382"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789032268533-d328g29",
+      "userTurnOrdinal": 2,
+      "state": "accepted",
+      "localMessageId": "msg-1789032268529-estpm3w",
+      "timestamp": 1789032268529,
+      "rawDisplayText": "DRG页面分成两栏，左侧为全国CHS-DRG2.0和山西临汾CHS-DRG；右侧为全国CHS-DR G3.0 分组界面相同",
+      "canonicalText": "DRG页面分成两栏，左侧为全国CHS-DRG2.0和山西临汾CHS-DRG；右侧为全国CHS-DR G3.0 分组界面相同",
+      "images": [],
+      "contentDigest": "bab68f64447a46843c7a2ff03bf0a11eecd3386d0d28c6102654c57211fcc011",
+      "providerUserMessageId": "e641cf06-d772-4aa4-9ec8-dbd70432dcf5",
+      "providerAssistantMessageId": "df6d298e-f061-4a92-a7d5-000000000001"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789039010486-b6yslub",
+      "userTurnOrdinal": 3,
+      "state": "accepted",
+      "localMessageId": "msg-1789039010473-sorkysu",
+      "timestamp": 1789039010473,
+      "rawDisplayText": "你好",
+      "canonicalText": "你好",
+      "images": [],
+      "contentDigest": "815b1925f3db319cfc8ef8cad8a91b3f8b512f630d8f82635cb105e93e666c2a",
+      "providerUserMessageId": "c5519f45-0c1b-42dc-9fe6-221b7e8d5e36",
+      "providerAssistantMessageId": "56515237-e93c-4f6a-8968-b2b1f086001d"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789039363445-d5ggz8w",
+      "userTurnOrdinal": 4,
+      "state": "accepted",
+      "localMessageId": "msg-1789039363432-l5r7adq",
+      "timestamp": 1789039363432,
+      "rawDisplayText": "之前的任务完成了吗？",
+      "canonicalText": "之前的任务完成了吗？",
+      "images": [],
+      "contentDigest": "0ad3e451e1b0b1014b74c8251c011f5133a196bbeb977cf16e67d6e3cd7b054a",
+      "providerUserMessageId": "4f7a3c1d-22d4-46d2-a401-7f478fe9c0f3",
+      "providerAssistantMessageId": "c8f269e1-822b-4918-a8a8-9794474dde8a"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789040235680-ojgmk6k",
+      "userTurnOrdinal": 5,
+      "state": "accepted",
+      "localMessageId": "msg-1789040235665-xick952",
+      "timestamp": 1789040235665,
+      "rawDisplayText": "如何连接秘塔AI搜索",
+      "canonicalText": "如何连接秘塔AI搜索",
+      "images": [],
+      "contentDigest": "ab0a78b35f68f5c915047b85f686286da4f6772e541daa0d78079b08138d0039",
+      "providerUserMessageId": "2f25fe7c-cb60-4de1-a940-44de714e3ee4",
+      "providerAssistantMessageId": "ed23cd70-3706-42b6-bd5b-e8a98a965343"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789042711176-bxygtgu",
+      "userTurnOrdinal": 6,
+      "state": "accepted",
+      "localMessageId": "msg-1789042711160-v51mb5d",
+      "timestamp": 1789042711160,
+      "rawDisplayText": "http://localhost:8765/index.html这个页面已经按照为全国CHS-DRG2.0和山西临汾CHS-DRG；与全国CHS-DR G3.0 分组界面分开，但是现实的是上下结构不是左右结构，你再修改一下",
+      "canonicalText": "http://localhost:8765/index.html这个页面已经按照为全国CHS-DRG2.0和山西临汾CHS-DRG；与全国CHS-DR G3.0 分组界面分开，但是现实的是上下结构不是左右结构，你再修改一下",
+      "images": [],
+      "contentDigest": "8b518b17380a8847a074f9c6f5c76c41479443511fdc24a5f3c452981f10c940",
+      "providerUserMessageId": "24b5a86a-43a7-4f9b-a310-0f8393b5d5c6"
+    }
+  ]
+}

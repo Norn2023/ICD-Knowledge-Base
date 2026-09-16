@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "conversationId": "conv-1789126089304-xrhhzw9nk",
+  "records": [
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789126089434-a70pnfw",
+      "userTurnOrdinal": 1,
+      "state": "accepted",
+      "localMessageId": "msg-1789126089299-0mp6vrt",
+      "timestamp": 1789126089299,
+      "rawDisplayText": "http://localhost:8765/index.html，DRG和DIP页面都加载了DRG3.0这个不对",
+      "canonicalText": "http://localhost:8765/index.html，DRG和DIP页面都加载了DRG3.0这个不对",
+      "images": [],
+      "contentDigest": "c9026d7615930c914cae7ddb34d9e18426f4ceee8036b879bf4b0d1f429764b8",
+      "providerUserMessageId": "170fb549-7d9d-4752-8857-747d3ecd460f"
+    },
+    {
+      "schemaVersion": 1,
+      "id": "msg-1789126533032-7hznv8t",
+      "userTurnOrdinal": 2,
+      "state": "staged",
+      "localMessageId": "msg-1789126533023-2j75jwx",
+      "timestamp": 1789126533023,
+      "rawDisplayText": "你好",
+      "canonicalText": "你好",
+      "images": [],
+      "contentDigest": "815b1925f3db319cfc8ef8cad8a91b3f8b512f630d8f82635cb105e93e666c2a"
+    }
+  ]
+}

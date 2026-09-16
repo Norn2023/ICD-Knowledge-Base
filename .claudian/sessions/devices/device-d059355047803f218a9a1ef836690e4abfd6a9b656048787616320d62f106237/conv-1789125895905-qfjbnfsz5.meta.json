@@ -1,0 +1,20 @@
+{
+  "id": "conv-1789125895905-qfjbnfsz5",
+  "providerId": "claude",
+  "title": "恢复DRG和DIP页面原始样式",
+  "titleGenerationStatus": "success",
+  "createdAt": 1789125895922,
+  "lastActivityAt": 1789125953371,
+  "sessionId": null,
+  "selectedModel": "haiku",
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 1335,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 39424,
+    "contextWindow": 200000,
+    "contextTokens": 40759,
+    "percentage": 20,
+    "contextWindowIsAuthoritative": true
+  }
+}
