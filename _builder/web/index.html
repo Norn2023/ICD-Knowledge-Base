@@ -9,6 +9,9 @@
 <body>
 <header><h1>ICD 编码知识库</h1>
 <div class="sub">ICD-10 · ICD-9 · DIP · DRG</div>
+<div style="position:fixed;top:10px;right:20px;z-index:1000;font-size:.75em">
+<a href="http://127.0.0.1:8766/" style="color:var(--accent);text-decoration:none;padding:4px 10px;border:1px solid var(--accent);border-radius:4px">DRG 3.0 版本</a>
+</div>
 <nav>
 <button class="active" onclick="st('icd10')">ICD-10</button>
 <button onclick="st('icd9')">ICD-9</button>
@@ -39,7 +42,7 @@
 <!-- DRG -->
 <div id="t-drg" class="tab">
 <h3 style="margin-bottom:4px">CHS-DRG 2.0 分组器</h3>
-<div id="drg-status" style="font-size:.75em;color:var(--text-dim);margin-bottom:10px">DRG数据: <span id="ds2">预加载中...</span> <span style="margin-left:12px">分组版本: </span><select id="drg-ver" style="font-size:.82em;padding:3px 8px;border:1px solid var(--border);border-radius:var(--r-xs);background:var(--bg-card);color:var(--text)" onchange="dr()"><option value="nat">全国 CHS-DRG 2.0</option><option value="linfen">山西临汾 CHS-DRG-SX2026</option></select></div>
+<div id="drg-status" style="font-size:.75em;color:var(--text-dim);margin-bottom:10px">DRG数据: <span id="ds2">预加载中...</span> <span style="margin-left:12px">分组版本: </span><select id="drg-ver" style="font-size:.82em;padding:3px 8px;border:1px solid var(--border);border-radius:var(--r-xs);background:var(--bg-card);color:var(--text)" onchange="dr()"><option value="nat" selected>全国 CHS-DRG 2.0</option></select></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
 <div class="drgbox">
 <h4>疾病诊断 (ICD-10)</h4>
